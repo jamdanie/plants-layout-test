@@ -22,13 +22,19 @@ body {
 }
 
 .item {
-  background: #c9d6c2;
+  /* layout */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+
+  /* appearance */
   border-radius: 16px;
   overflow: hidden;
+  padding: 1rem;
+
+  /* text */
+  color: #1f1f1f;
+  text-align: center;
 }
 
 .item img {
