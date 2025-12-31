@@ -47,115 +47,87 @@ body{
   z-index: 1;
 }
 
-/* deeper electric palette */
+/* deeper electric palette (more contrast, less haze) */
 .shape--blob{
   left: 0;
   top: 0;
-  width: 820px;
-  height: 420px;
+  width: 860px;
+  height: 460px;
   border-radius: 44px;
   background: linear-gradient(
     90deg,
-    rgba(255, 230, 0, 0.45),
-    rgba(0, 255, 200, 0.18) 45%,
-    transparent 75%
-  );
-  filter: blur(18px);
-  opacity: .9;
-}
-
-.shape--circle{
-  width: 560px;
-  height: 560px;
-  left: -220px;
-  top: -90px;
-  border-radius: 50%;
-  background: rgba(255, 230, 0, 0.33);
-  filter: blur(2px);
-  animation: floaty 9s ease-in-out infinite;
-}
-
-.shape--ring{
-  width: 440px;
-  height: 440px;
-  left: 120px;
-  top: 24px;
-  border-radius: 50%;
-  border: 18px solid rgba(255, 230, 0, 0.40);
-  background: transparent;
-  animation: spin 16s linear infinite;
-  opacity: .95;
-}
-
-.shape--dot{
-  width: 150px;
-  height: 150px;
-  left: -40px;
-  top: 90px;
-  border-radius: 50%;
-  background: rgba(0, 255, 200, 0.18);
-  filter: blur(1px);
-  animation: floaty2 6.5s ease-in-out infinite;
-}
-
-.shape--spark{
-  width: 460px;
-  height: 260px;
-  left: 30px;
-  top: -10px;
-  border-radius: 999px;
-  background: radial-gradient(
-    circle at 30% 40%,
-    rgba(255, 230, 0, .70),
-    rgba(255, 230, 0, .18) 55%,
-    rgba(0, 255, 200, .10) 70%,
+    rgba(255, 230, 0, 0.65),
+    rgba(0, 255, 200, 0.26) 45%,
     transparent 78%
   );
   filter: blur(14px);
   opacity: .95;
 }
 
+.shape--circle{
+  width: 580px;
+  height: 580px;
+  left: -230px;
+  top: -100px;
+  border-radius: 50%;
+  background: rgba(255, 230, 0, 0.45);
+  animation: floaty 9s ease-in-out infinite;
+}
+
+.shape--ring{
+  width: 460px;
+  height: 460px;
+  left: 120px;
+  top: 20px;
+  border-radius: 50%;
+  border: 20px solid rgba(255, 230, 0, 0.55);
+  background: transparent;
+  animation: spin 16s linear infinite;
+  opacity: .95;
+}
+
+.shape--dot{
+  width: 160px;
+  height: 160px;
+  left: -45px;
+  top: 95px;
+  border-radius: 50%;
+  background: rgba(0, 255, 200, 0.25);
+  animation: floaty2 6.5s ease-in-out infinite;
+}
+
+.shape--spark{
+  width: 480px;
+  height: 280px;
+  left: 20px;
+  top: -20px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at 30% 40%,
+    rgba(255, 230, 0, 0.90),
+    rgba(255, 230, 0, 0.25) 55%,
+    rgba(0, 255, 200, 0.16) 70%,
+    transparent 78%
+  );
+  filter: blur(10px);
+  opacity: .95;
+}
+
 .shape--ring2{
-  width: 310px;
-  height: 310px;
+  width: 320px;
+  height: 320px;
   right: 110px;
   top: -60px;
   border-radius: 50%;
-  border: 14px solid rgba(0, 255, 200, .18);
+  border: 16px solid rgba(0, 255, 200, 0.28);
   background: transparent;
   animation: spin 11s linear infinite reverse;
 }
 
 /* ---------------------------
-   FOREGROUND LAYERS
-   order: shapes(1) -> echoes(2) -> record(3) -> player/text(4)
+   LAYERS
+   order: shapes(1) -> record(3) -> player/text(4)
 ---------------------------- */
-
-/* record player container (top layer) */
-.hero-media{
-  position: relative;
-  z-index: 4;
-
-  border-radius: 26px;
-  overflow: visible; /* IMPORTANT so glow can extend */
-  aspect-ratio: 4 / 3;
-  background: transparent;
-
-  box-shadow: 0 20px 60px rgba(0,0,0,.10);
-}
-
-/* actual player image */
-.hero-media img{
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
-
-  animation: slowPan 7s ease-in-out infinite alternate;
-  will-change: transform;
-
-  filter: drop-shadow(0px 10px 18px rgba(0,0,0,.10));
-}
 
 /* text top layer */
 .hero-content{
@@ -166,86 +138,113 @@ body{
 /* spinning record layer */
 .record-spin{
   position: absolute;
-  z-index: 3;                 /* above echoes, below player */
+  z-index: 3;              /* behind player, above shapes */
   width: 220px;
   height: 220px;
-  left: 110px;                /* move left/right */
-  top: 40px;                  /* move up/down */
-
+  left: 110px;             /* move left/right */
+  top: 40px;               /* move up/down */
   border-radius: 50%;
-  overflow: hidden;           /* circle mask kills spinning-square look */
+  overflow: hidden;        /* circle mask */
+  pointer-events: none;
+  filter: drop-shadow(0 14px 24px rgba(0,0,0,.12));
+  isolation: isolate;      /* keeps its pseudo layers contained */
+}
+
+/* record neon echo (behind record image) */
+.record-spin::before{
+  content: "";
+  position: absolute;
+  inset: -8%;
+  border-radius: 50%;
+  z-index: 0;
   pointer-events: none;
 
-  filter: drop-shadow(0 14px 24px rgba(0,0,0,.12));
+  /* solid neon aura (no image clone) */
+  background:
+    conic-gradient(
+      from 40deg,
+      rgba(255, 230, 0, 0.95),
+      rgba(0, 255, 200, 0.65),
+      rgba(255, 230, 0, 0.95)
+    );
+
+  filter: blur(2px) saturate(1.6);
+  opacity: .95;
 }
 
 /* spinning record image */
 .record-spin img{
+  position: relative;
+  z-index: 1;
   width: 112%;
   height: 112%;
   margin: -6%;
   display: block;
   object-fit: cover;
-
   transform-origin: 50% 50%;
   animation: recordSpin 1.4s linear infinite;
 }
 
-/* ---------------------------
-   NEON ECHO CLONES (layer 2)
-   (no extra HTML needed)
----------------------------- */
+/* record player container (top layer) */
+.hero-media{
+  position: relative;
+  z-index: 4;
 
-/* PLAYER neon echo (must NOT cover spinning record) */
+  border-radius: 26px;
+  overflow: hidden;        /* IMPORTANT: plate is clipped so it can't cover the record */
+  isolation: isolate;
+
+  aspect-ratio: 4 / 3;
+  background: transparent;
+  box-shadow: 0 20px 60px rgba(0,0,0,.10);
+}
+
+/* SOLID neon plate behind the player (clipped inside hero-media) */
 .hero-media::before{
   content: "";
   position: absolute;
-  inset: -12%;
-  z-index: 2;              /* below record-spin (3) */
+  inset: 0;
+  border-radius: inherit;
+  z-index: 0;
   pointer-events: none;
 
-  background-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
+  /* more SOLID electric look (less haze, more punch) */
+  background:
+    radial-gradient(circle at 28% 40%,
+      rgba(255, 230, 0, 1.0),
+      rgba(255, 230, 0, 0.35) 52%,
+      transparent 72%),
+    radial-gradient(circle at 72% 56%,
+      rgba(0, 255, 200, 0.85),
+      rgba(0, 255, 200, 0.18) 60%,
+      transparent 80%),
+    conic-gradient(from 220deg,
+      rgba(255, 230, 0, 0.55),
+      rgba(0, 255, 200, 0.35),
+      rgba(255, 230, 0, 0.55));
 
-  transform: scale(1.12);
-  opacity: .92;
-
-  filter:
-    blur(2px)
-    saturate(3.2)
-    contrast(1.15)
-    hue-rotate(95deg)
-    drop-shadow(0 0 18px rgba(255, 230, 0, 0.55))
-    drop-shadow(0 0 26px rgba(0, 255, 200, 0.28));
-  mix-blend-mode: screen;
+  filter: blur(6px) saturate(1.8) contrast(1.08);
+  transform: scale(1.06);
+  opacity: 1;
 }
 
-/* RECORD neon echo (circular + behind record image) */
-.record-spin::before{
-  content: "";
-  position: absolute;
-  inset: -10%;
-  z-index: 2; /* behind record image, but record-spin itself is z=3 */
-  pointer-events: none;
+/* actual player image (above plate) */
+.hero-media img{
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
 
-  background-image: url("https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDI0LTA3L3NtYWxsZGVzaWduY29tcGFueTAxX3ZpbnRhZ2VfcGFpbnRpbmdfb2ZfdmlueWxfcmVjb3JkX3BlbmNpbF9jb18zMzI1Zjg4OC0xMDRkLTQyNzQtYWRlZi02NDQxNTVjMDEyZTMucG5n.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
+  animation: slowPan 7s ease-in-out infinite alternate;
+  will-change: transform;
 
-  transform: scale(1.18);
-  opacity: .95;
-
+  /* extra glow depth (safe) */
   filter:
-    blur(1.5px)
-    saturate(3.6)
-    contrast(1.2)
-    hue-rotate(110deg)
-    drop-shadow(0 0 20px rgba(255, 230, 0, 0.55))
-    drop-shadow(0 0 28px rgba(0, 255, 200, 0.24));
-  mix-blend-mode: screen;
+    drop-shadow(0px 10px 18px rgba(0,0,0,.10))
+    drop-shadow(0 0 18px rgba(255, 230, 0, 0.22))
+    drop-shadow(0 0 22px rgba(0, 255, 200, 0.14));
 }
 
 /* ---------------------------
