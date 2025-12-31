@@ -26,6 +26,7 @@ body{
   position: relative;
   border-radius: 28px;
   overflow: hidden;
+  isolation: isolate;
 
   background: #f2f2f0;
 
@@ -50,6 +51,7 @@ body{
   overflow: hidden;
   aspect-ratio: 4 / 3;
   box-shadow: 0 20px 60px rgba(0,0,0,.10);
+  background: transparent;
 }
 
 .hero-media img{
@@ -57,7 +59,19 @@ body{
   height: 100%;
   display: block;
   object-fit: cover;
-  animation: slowPan 12s ease-in-out infinite;
+
+  /* stronger + more noticeable */
+  animation: slowPan 7s ease-in-out infinite alternate;
+  will-change: transform;
+
+  /* makes the white areas blend */
+  mix-blend-mode: multiply;
+  filter: contrast(1.05) saturate(1.1);
+}
+
+@keyframes slowPan{
+  from { transform: scale(1.08) translate(0px, 0px); }
+  to   { transform: scale(1.16) translate(-28px, 18px); }
 }
 
 /* right-side text */
@@ -89,11 +103,7 @@ body{
   width: 760px;
   height: 360px;
   border-radius: 40px;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 234, 0, 0.35),
-    transparent 70%
-  );
+  background: linear-gradient(90deg, rgba(255, 234, 0, 0.35), transparent 70%);
 }
 
 /* big soft circle */
@@ -144,11 +154,6 @@ body{
 @keyframes floaty2{
   0%,100%{ transform: translate(0,0) scale(1); }
   50%{ transform: translate(12px, 10px) scale(1.06); }
-}
-
-@keyframes slowPan{
-  0%,100%{ transform: scale(1.03) translate(0,0); }
-  50%{ transform: scale(1.06) translate(-10px, 8px); }
 }
 
 /* mobile */
