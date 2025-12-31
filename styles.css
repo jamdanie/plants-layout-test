@@ -38,7 +38,7 @@ body{
   min-height: 420px;
 }
 
-/* floating shapes (electric yellow theme) */
+/* floating shapes */
 .shape{
   position: absolute;
   pointer-events: none;
@@ -91,11 +91,39 @@ body{
   animation: floaty2 7s ease-in-out infinite;
 }
 
-/* content layers above shapes */
+/* extra electric shapes */
+.shape--spark{
+  width: 380px;
+  height: 220px;
+  left: 40px;
+  top: 10px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at 30% 40%,
+    rgba(255, 234, 0, .55),
+    rgba(255, 234, 0, .12) 55%,
+    transparent 70%
+  );
+  filter: blur(10px);
+  opacity: .9;
+}
+
+.shape--ring2{
+  width: 280px;
+  height: 280px;
+  right: 120px;
+  top: -40px;
+  border-radius: 50%;
+  border: 14px solid rgba(255, 234, 0, .25);
+  background: transparent;
+  animation: spin 10s linear infinite reverse;
+}
+
+/* keep player + text above record + shapes */
 .hero-media,
 .hero-content{
   position: relative;
-  z-index: 3;
+  z-index: 4;
 }
 
 /* image block */
@@ -111,12 +139,31 @@ body{
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: contain; /* better for transparent PNG cutouts */
+  object-fit: contain;
   animation: slowPan 7s ease-in-out infinite alternate;
   will-change: transform;
-
-  /* keep the plant feeling “lifted” */
   filter: drop-shadow(0px 10px 18px rgba(0,0,0,.10));
+}
+
+/* spinning record */
+.record-spin{
+  position: absolute;
+  z-index: 3;              /* behind player, above shapes */
+  width: 220px;
+  height: 220px;
+  left: 120px;             /* tweak to move */
+  top: 115px;              /* tweak to move */
+  pointer-events: none;
+  filter: drop-shadow(0 14px 24px rgba(0,0,0,.12));
+}
+
+.record-spin img{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  transform-origin: 50% 50%;
+  animation: recordSpin 0.55s linear infinite;
 }
 
 /* movement */
@@ -125,7 +172,11 @@ body{
   to   { transform: scale(1.16) translate(-28px, 18px); }
 }
 
-/* right-side text */
+@keyframes recordSpin{
+  to { transform: rotate(360deg); }
+}
+
+/* text */
 .hero-content h1{
   margin: 0 0 1rem;
   font-size: 1.1rem;
@@ -166,5 +217,13 @@ body{
 
   .hero-content h1{
     letter-spacing: .2em;
+  }
+
+  /* optional: reposition record on mobile */
+  .record-spin{
+    left: 70px;
+    top: 90px;
+    width: 180px;
+    height: 180px;
   }
 }
