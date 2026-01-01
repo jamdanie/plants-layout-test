@@ -127,25 +127,28 @@ body{
    SPINNING RECORD (FINAL)
 ========================= */
 .hero-media .record-spin{
-  position: absolute !important;
-  pointer-events: none !important;
-  z-index: 2 !important;
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
 
-  left: 50% !important;
-  top: 50% !important;
+  left: 50%;
+  top: 50%;
 
-  width: 46% !important;
-  aspect-ratio: 1 / 1 !important;
+  width: 46%;
+  aspect-ratio: 1 / 1;
 
-  border-radius: 50% !important;
-  overflow: hidden !important;
+  border-radius: 50%;
+  overflow: hidden;
 
-  /* ✅ BASE POSITION (edit these numbers) */
+  /* your nudges */
   --rx: -18px;
   --ry: -125px;
 
-  transform-origin: 50% 50% !important;
-  animation: platterWobble 2.6s ease-in-out infinite !important;
+  /* BASE position: always centered + nudged */
+  transform: translate(calc(-50% + var(--rx)), calc(-50% + var(--ry)));
+  transform-origin: 50% 50%;
+
+  animation: platterWobble 2.6s ease-in-out infinite;
 }
 
 .hero-media .record-spin img{
@@ -179,18 +182,10 @@ body{
 }
 
 @keyframes platterWobble{
-  0%,100% {
-    transform: translate(-50%, -50%) translate(var(--rx), var(--ry)) translate(0,0);
-  }
-  25% {
-    transform: translate(-50%, -50%) translate(var(--rx), var(--ry)) translate(0.7px,-0.4px);
-  }
-  50% {
-    transform: translate(-50%, -50%) translate(var(--rx), var(--ry)) translate(-0.6px,0.6px);
-  }
-  75% {
-    transform: translate(-50%, -50%) translate(var(--rx), var(--ry)) translate(0.5px,-0.3px);
-  }
+  0%,100% { translate: 0 0; }
+  25%     { translate: 0.7px -0.4px; }
+  50%     { translate: -0.6px 0.6px; }
+  75%     { translate: 0.5px -0.3px; }
 }
 
 @keyframes slowPan{
