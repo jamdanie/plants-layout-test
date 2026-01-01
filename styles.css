@@ -417,12 +417,12 @@ body{
   }
 }
 
-/* ===== FINAL MICRO FIX: LEFT NUDGE + GUARANTEED SPIN ===== */
+/* ===== FINAL LOCK: LEFT ALIGN + GUARANTEED SPIN ===== */
 
-/* Container: position + size only (NO animation here) */
+/* 1) Platter container — POSITION ONLY */
 .hero-media .record-spin{
-  left: 22.9% !important;   /* move LEFT (was ~23.6%) */
-  top: 23.8% !important;
+  left: 21.8% !important;     /* move LEFT */
+  top: 23.6% !important;
 
   width: 44% !important;
   height: 44% !important;
@@ -432,12 +432,33 @@ body{
 
   animation: none !important;
   transform: none !important;
+  will-change: auto !important;
 }
 
-/* The actual spinning platter */
+/* 2) The ONLY spinning layer */
 .hero-media .record-spin::after{
-  inset: -2% !important;    /* edge fill */
+  content: "";
+  position: absolute;
+  inset: -2% !important;     /* edge bleed so it fills cleanly */
   border-radius: 50%;
+
+  background:
+    radial-gradient(circle at center,
+      #0b0b0b 0%,
+      #0b0b0b 64%,
+      #050505 72%,
+      #000 100%
+    );
+
+  -webkit-mask-image: url("platter.png");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: 100% 100%;
+
+  mask-image: url("platter.png");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: 100% 100%;
 
   transform-origin: 50% 50% !important;
   animation: platterSpin 1.05s linear infinite !important;
@@ -447,15 +468,15 @@ body{
   transform: translateZ(0);
 }
 
-/* Safety: no img transforms allowed */
+/* 3) Safety — image never interferes */
 .hero-media .record-spin img{
   display: none !important;
 }
 
-/* Mobile correction */
+/* 4) Mobile */
 @media (max-width: 768px){
   .hero-media .record-spin{
-    left: 22.2% !important;
+    left: 21% !important;
     top: 21.8% !important;
     width: 48% !important;
     height: 48% !important;
