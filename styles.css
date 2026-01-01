@@ -417,55 +417,35 @@ body{
   }
 }
 
-/* ===== FINAL FIX PATCH (paste at VERY END of styles.css) ===== */
+/* ===== PLATTER CIRCLE FIX (paste at VERY END) ===== */
 
-/* 1) PLATTER: move DOWN + RIGHT + make BIGGER + FORCE ROTATION */
+/* Force the platter container to ALWAYS be a perfect square */
 .hero-media .record-spin{
-  left: 24.2% !important;   /* right a bit (was ~23.4%) */
-  top: 24.0% !important;    /* down a bit (was ~23.0%) */
-  width: 38% !important;    /* bigger */
-  height: 38% !important;   /* keep square */
+  left: 24.2% !important;      /* keep your alignment */
+  top: 24.0% !important;
 
-  /* backup spin in case ::after gets overridden */
+  width: 38% !important;       /* size controlled by width only */
+  height: auto !important;     /* remove % height that causes oval */
+  aspect-ratio: 1 / 1 !important;
+
+  border-radius: 50% !important;
+  overflow: hidden !important;
+
+  /* keep spinning */
   animation: platterContainerSpin 1.15s linear infinite !important;
   transform-origin: 50% 50% !important;
 }
 
-/* force the actual vinyl layer to spin no matter what */
+/* If your black vinyl is drawn on ::after, keep it perfectly square too */
 .hero-media .record-spin::after{
+  inset: 0 !important;
+  border-radius: 50% !important;
   animation: platterSpin 1.15s linear infinite !important;
   transform-origin: 50% 50% !important;
 }
 
-/* backup keyframes (container spin) */
+/* Backup keyframes (if not already defined above) */
 @keyframes platterContainerSpin{
   to { transform: rotate(360deg); }
 }
 
-/* 2) ORBIT: remove checker edge by oversizing + adding white outline */
-.shape--orbit{
-  display: grid !important;
-  place-items: center !important;
-}
-
-.shape--orbit::after{
-  width: 78% !important;     /* bigger white backing disc */
-  height: 78% !important;
-  background: #fff !important;
-}
-
-/* make the record slightly larger than the backing disc and crop */
-.shape--orbit .orbit-record{
-  width: 76% !important;     /* bigger record to cover edge */
-  height: 76% !important;
-
-  /* overscale inside its circle so transparent edge disappears */
-  transform: scale(1.10);
-  animation: orbitRecordSpin 8s linear infinite !important;
-  transform-origin: 50% 50%;
-  will-change: transform;
-
-  /* hides remaining jagged edge */
-  outline: 10px solid #fff;
-  outline-offset: -2px;
-}
