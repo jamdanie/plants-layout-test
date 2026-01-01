@@ -175,116 +175,108 @@ body{
 }
 
 /* =========================
-   FOREGROUND LAYERS
-   shapes(1) -> player plates(2) -> record(6) -> player/text(7)
+   PLAYER (fixed sizing + safe masked layers)
 ========================= */
-.hero-content{
-  position: relative;
-  z-index: 7;
-}
-
-/* record player container */
 .hero-media{
   position: relative;
   z-index: 7;
   border-radius: 26px;
   background: transparent;
-  box-shadow: 0 20px 60px rgba(0,0,0,.10);
-  overflow: visible;     /* plates can extend */
-  isolation: isolate;    /* keep blend contained */
+  overflow: visible;
+  isolation: isolate;
+
+  /* IMPORTANT: give the media a real size again */
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 4 / 3;
 }
 
-/* -------- LAYERED SOLID SILHOUETTE PLATES --------
-   These are SOLID colored duplicates of the PNG shape
-   (NOT a rounded square fill) because we mask them.
--------------------------------------------------- */
-
-/* plate 1 (hot pink) */
+/* PLATE 1 (hot pink) */
 .hero-media::before{
   content: "";
   position: absolute;
-  inset: -10%;
-  z-index: 0;
+  inset: -12%;
+  z-index: 1;
   pointer-events: none;
 
-  background: rgb(255, 0, 170);
+  background-color: rgb(255, 0, 170);
+  opacity: .35; /* lower so it can’t wash everything */
 
-  -webkit-mask: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807")
-    center / contain no-repeat;
-  mask: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807")
-    center / contain no-repeat;
+  /* safer mask properties (more compatible than shorthand) */
+  -webkit-mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
 
-  transform: translate(-18px, 12px) scale(1.14);
-  opacity: .92;
+  mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+
+  transform: translate(-18px, 12px) scale(1.10);
 
   filter:
-    blur(0.8px)
-    drop-shadow(0 0 18px rgba(255, 0, 170, 0.90))
-    drop-shadow(0 0 24px rgba(255, 0, 170, 0.40));
+    blur(1px)
+    drop-shadow(0 0 22px rgba(255, 0, 170, .85));
 
   animation: platePulsePink 6.2s ease-in-out infinite;
 }
 
-/* plate 2 (purple) */
+/* PLATE 2 (purple) */
 .hero-media::after{
   content: "";
   position: absolute;
-  inset: -10%;
-  z-index: 0;
+  inset: -12%;
+  z-index: 1;
   pointer-events: none;
 
-  background: rgb(130, 0, 255);
+  background-color: rgb(130, 0, 255);
+  opacity: .22;
 
-  -webkit-mask: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807")
-    center / contain no-repeat;
-  mask: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807")
-    center / contain no-repeat;
+  -webkit-mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
 
-  transform: translate(16px, -10px) scale(1.12);
-  opacity: .55;
+  mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+
+  transform: translate(16px, -10px) scale(1.08);
 
   filter:
-    blur(1.4px)
-    drop-shadow(0 0 18px rgba(130, 0, 255, 0.75))
-    drop-shadow(0 0 14px rgba(0, 220, 255, 0.35));
+    blur(1.6px)
+    drop-shadow(0 0 18px rgba(130, 0, 255, .75))
+    drop-shadow(0 0 14px rgba(0, 220, 255, .35));
 
   animation: platePulsePurple 7.1s ease-in-out infinite;
 }
 
-/* optional third plate (cyan) — no extra HTML needed */
-.hero-media .plate-cyan{ display:none; } /* safety (in case you add it) */
-.hero-media{
-  /* create a 3rd plate using a background layer on the container itself via mask trick? no.
-     Instead: we add a dedicated pseudo on the IMAGE itself (supported + clean). */
-}
-.hero-media img::before{ content:none; } /* safety */
-
-/* real player image */
+/* Real player image always on top */
 .hero-media img{
   position: relative;
   z-index: 3;
+
   width: 100%;
   height: 100%;
   display: block;
   object-fit: contain;
 
-  animation: slowPan 7s ease-in-out infinite alternate;
-  will-change: transform;
-
   filter: drop-shadow(0px 12px 22px rgba(0,0,0,.14));
+  animation: slowPan 7s ease-in-out infinite alternate;
 }
 
 /* =========================
    SPINNING RECORD (ALWAYS ABOVE PLATES)
 ========================= */
 .record-spin{
-  position: absolute;   /* REQUIRED for z-index + left/top */
-  z-index: 6;           /* above hero-media plates (z=0), below content/image (z=7/3) is fine */
+  position: absolute;
+  z-index: 20; /* brute force above plates + player */
   width: 220px;
   height: 220px;
   left: 90px;
   top: 10px;
-
   pointer-events: none;
   isolation: isolate;
 }
