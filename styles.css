@@ -420,4 +420,30 @@ body{
     top: 20%;
   }
 }
+/* ===== FINAL TWEAKS (paste at VERY END of styles.css) ===== */
+
+/* 1) PLATTER: slightly LOWER + slightly BIGGER to fill the platter area */
+.hero-media .record-spin{
+  top: 23.2% !important;      /* was 22% -> move DOWN */
+  left: 23.6% !important;     /* tiny nudge left */
+  width: 35% !important;      /* was 33% -> bigger */
+  height: 35% !important;     /* keep square so it stays circular */
+}
+
+/* keep the mask filling the entire box */
+.hero-media .record-spin::after{
+  -webkit-mask-size: 100% 100% !important;
+  mask-size: 100% 100% !important;
+}
+
+/* 2) ORBIT: make the vinyl bigger to hide checker edge */
+.shape--orbit::after{
+  width: 70% !important;      /* was 64% -> bigger white holder */
+  height: 70% !important;
+}
+
+/* vinyl itself bigger inside the holder */
+.shape--orbit .orbit-record{
+  inset: 14% !important;      /* was 18% -> less inset = bigger record */
+}
 
