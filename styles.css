@@ -198,35 +198,77 @@ body{
   isolation: isolate;
 }
 
-/* OUTSIDE-ONLY glow: we draw a duplicate, blur it HARD, then hide its "fill" by lowering opacity and relying on drop-shadows */
+/* ===============================
+   SOLID silhouette behind player
+   (no rectangle fill, no hover junk)
+   =============================== */
+
+.hero-media{
+  position: relative;
+  z-index: 4;
+  border-radius: 26px;
+  background: transparent;
+  box-shadow: 0 20px 60px rgba(0,0,0,.10);
+  overflow: visible; /* silhouette can extend */
+  isolation: isolate;
+}
+
+/* SOLID silhouette (exact PNG shape) */
 .hero-media::before{
   content: "";
   position: absolute;
-  inset: -8%;
-  z-index: 0;
+  inset: -10%;            /* slightly bigger than the real player */
+  z-index: 0;             /* behind the real image */
   pointer-events: none;
 
-  background-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
+  /* SOLID color (pick your vibe) */
+  background-color: rgb(255, 0, 170); /* hot pink */
 
-  transform: scale(1.06);
+  /* mask = exact shape of the PNG (no square) */
+  -webkit-mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
 
-  /* KEY: keep the base nearly invisible so it doesn't "fill" the transparent parts */
-  opacity: .14;
+  mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
 
+  /* depth (still solid — just glowing edges) */
   filter:
-    blur(7px)
-    saturate(2.4)
-    contrast(1.05)
-    drop-shadow(0 0 22px rgba(255, 0, 170, .70))
-    drop-shadow(0 0 26px rgba(130, 0, 255, .55))
-    drop-shadow(0 0 22px rgba(0, 220, 255, .32));
+    blur(0.6px)
+    drop-shadow(0 0 18px rgba(255, 0, 170, 0.85))
+    drop-shadow(0 0 26px rgba(130, 0, 255, 0.60))
+    drop-shadow(0 0 18px rgba(0, 220, 255, 0.30));
 
-  mix-blend-mode: screen;
-  animation: playerGlow 5.2s ease-in-out infinite;
+  transform: scale(1.12);
+  opacity: 1;
+
+  animation: solidPlayerPulse 5.5s ease-in-out infinite;
 }
+
+/* real player image stays on top */
+.hero-media img{
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+
+  animation: slowPan 7s ease-in-out infinite alternate;
+  will-change: transform;
+
+  filter: drop-shadow(0px 12px 22px rgba(0,0,0,.14));
+}
+
+@keyframes solidPlayerPulse{
+  0%,100% { transform: scale(1.12); }
+  50%     { transform: scale(1.16); }
+}
+
 
 .hero-media img{
   position: relative;
