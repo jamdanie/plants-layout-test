@@ -16,6 +16,21 @@ body{
   color: #111;
 }
 
+.skip-link{
+  position: absolute;
+  left: -999px;
+  top: 10px;
+  background: #fff;
+  color: #111;
+  padding: .6rem .9rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  z-index: 9999;
+}
+.skip-link:focus{
+  left: 10px;
+}
+
 /* HERO wrapper */
 .hero{
   max-width: 1200px;
