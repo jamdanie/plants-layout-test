@@ -417,47 +417,63 @@ body{
   }
 }
 
-/* ===== FINAL PLATTER MICRO-ALIGN (LAST OVERRIDE) ===== */
+/* ===== FINAL OVERRIDES v3 (PASTE LAST) ===== */
 
-/* 1) Move platter slightly UP + RIGHT and make it slightly larger */
+/* --- PLATTER: bigger + slightly higher/right + NEVER oval --- */
 .hero-media .record-spin{
-  top: 22.3% !important;     /* was ~24% → move UP */
-  left: 24.8% !important;    /* nudge RIGHT */
+  left: 24.2% !important;     /* a bit RIGHT */
+  top: 22.0% !important;      /* a bit UP */
 
-  width: 40% !important;     /* slightly bigger */
-  aspect-ratio: 1 / 1 !important;
-  height: auto !important;
+  width: 42% !important;      /* bigger */
+  height: 42% !important;     /* MUST match width (prevents oval) */
 
   border-radius: 50% !important;
   overflow: hidden !important;
 
-  animation: platterSpin 1.1s linear infinite !important;
-  transform-origin: 50% 50% !important;
+  /* do NOT animate the container, only the ::after */
+  animation: none !important;
 }
 
-/* 2) Ensure the masked vinyl fully fills the circle */
+/* platter spin is on the pseudo-element (your black vinyl) */
 .hero-media .record-spin::after{
-  inset: -1% !important;     /* tiny overscan to fill edge */
+  inset: -2% !important;      /* overscan so it fills edge */
   border-radius: 50% !important;
 
   -webkit-mask-size: 100% 100% !important;
   mask-size: 100% 100% !important;
 
   animation: platterSpin 1.1s linear infinite !important;
+  transform-origin: 50% 50% !important;
 }
 
-/* 3) Safety: force GPU rendering to avoid wobble */
-.hero-media .record-spin,
-.hero-media .record-spin::after{
-  backface-visibility: hidden;
-  transform: translateZ(0);
+/* --- ORBIT: hide checker edge by making the vinyl slightly “oversized” --- */
+.shape--orbit::after{
+  width: 78% !important;      /* bigger white holder */
+  height: 78% !important;
 }
 
-/* 4) Mobile correction */
+.shape--orbit .orbit-record{
+  width: 74% !important;      /* bigger record */
+  height: 74% !important;
+  background: #fff !important; /* if any transparency shows, it blends */
+  transform: scale(1.06) !important; /* pushes image past clip edge */
+}
+
+/* --- Mobile tweak --- */
 @media (max-width: 768px){
   .hero-media .record-spin{
-    width: 44% !important;
-    top: 21.5% !important;
-    left: 23% !important;
+    left: 22.4% !important;
+    top: 20.6% !important;
+    width: 46% !important;
+    height: 46% !important;
+  }
+
+  .shape--orbit::after{
+    width: 80% !important;
+    height: 80% !important;
+  }
+  .shape--orbit .orbit-record{
+    width: 76% !important;
+    height: 76% !important;
   }
 }
