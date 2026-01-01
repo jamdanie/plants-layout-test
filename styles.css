@@ -444,3 +444,48 @@ body{
     height: 50%;
   }
 }
+/* =========================
+   FINAL PLATTER TUNE
+   - slight RIGHT nudge
+   - visible analog wobble
+========================= */
+
+/* 1) Position: tiny move RIGHT */
+.hero-media .record-spin{
+  left: 20.4% !important;   /* was ~19.2% → move RIGHT slightly */
+  top: 24.3% !important;
+
+  width: 44% !important;
+  height: 44% !important;
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  /* visible wobble lives on container */
+  transform-origin: 50% 50%;
+  animation: platterWobble 2.2s ease-in-out infinite !important;
+}
+
+/* 2) Spin stays CLEAN on vinyl layer only */
+.hero-media .record-spin::after{
+  animation: platterSpin 1.05s linear infinite !important;
+}
+
+/* 3) Stronger, analog-style wobble (you can SEE it now) */
+@keyframes platterWobble{
+  0%   { transform: translate(0,0) rotate(0deg); }
+  25%  { transform: translate(1.2px,-0.6px) rotate(0.35deg); }
+  50%  { transform: translate(-0.8px,0.9px) rotate(-0.4deg); }
+  75%  { transform: translate(0.6px,-0.4px) rotate(0.25deg); }
+  100% { transform: translate(0,0) rotate(0deg); }
+}
+
+/* 4) Reduce-motion users still get spin + wobble */
+@media (prefers-reduced-motion: reduce){
+  .hero-media .record-spin{
+    animation: platterWobble 2.2s ease-in-out infinite !important;
+  }
+  .hero-media .record-spin::after{
+    animation: platterSpin 1.05s linear infinite !important;
+  }
+}
