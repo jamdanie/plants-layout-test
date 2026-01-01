@@ -411,32 +411,48 @@ body{
     width: 52%;
   }
 }
-/* ===== FINAL: CENTER RECORD INSIDE BACKGROUND RING ===== */
+/* ===== FINAL OVERRIDE (PASTE AT VERY END) ===== */
+/* Record sits ABOVE glow, BELOW player, and is centered into the big ring */
 
-.hero-media{
-  position: relative;
-}
+.hero-media{ position: relative; }
 
-/* Move record into the ring center */
+/* spinning record layer (behind player, above glow) */
 .hero-media .record-spin{
+  position: absolute !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+
   left: 50% !important;
   top: 50% !important;
 
-  transform:
-    translate(-50%, -50%)      /* true centering */
-    translate(-120px, -110px); /* nudges it into the ring */
+  width: 46% !important;
+  aspect-ratio: 1 / 1 !important;
 
-  /* size stays unchanged */
+  border-radius: 50% !important;
+  overflow: hidden !important;
+
+  /* ✅ this is the ONLY position control */
+  transform: translate(-50%, -50%) translate(-120px, -210px) !important;
+
+  transform-origin: 50% 50% !important;
+  animation: platterWobble 2.6s ease-in-out infinite !important;
+  will-change: transform !important;
 }
 
-/* keep wobble working */
-.hero-media .record-spin{
-  animation: platterWobble 2.6s ease-in-out infinite;
-}
-
-/* perfect circle guarantee */
-.hero-media .record-spin,
 .hero-media .record-spin img{
+  position: absolute !important;
+  inset: -10% !important;
+  width: 120% !important;
+  height: 120% !important;
+
+  object-fit: cover !important;
+
   border-radius: 50% !important;
   clip-path: circle(50% at 50% 50%) !important;
+
+  transform-origin: 50% 50% !important;
+  animation: platterSpin 1.05s linear infinite !important;
+
+  backface-visibility: hidden !important;
+  will-change: transform !important;
 }
