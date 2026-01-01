@@ -56,7 +56,6 @@ body{
   padding: 4rem;
   min-height: 420px;
 
-  /* perf containment */
   contain: layout paint;
 }
 
@@ -118,7 +117,7 @@ body{
 }
 
 /* =========================
-   ORBIT RING + RECORD (FIXED)
+   ORBIT RING + RECORD (CLEAN + CENTERED)
 ========================= */
 .shape--orbit{
   position: absolute;
@@ -133,37 +132,35 @@ body{
   animation: orbitDrift 7s ease-in-out infinite;
   will-change: transform;
 
-  /* center children */
+  /* center everything */
   display: grid;
   place-items: center;
-  overflow: visible;
 }
 
-/* white disc holder to hide checker edges */
+/* white disc holder hides checker edges */
 .shape--orbit::after{
   content: "";
   position: absolute;
-  width: 66%;
-  height: 66%;
+  width: 72%;
+  height: 72%;
   border-radius: 50%;
-  background: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,.92);
   z-index: 0;
 }
 
-/* orbit record: centered + cropped */
+/* orbit record always centered */
 .shape--orbit .orbit-record{
   position: relative;
   z-index: 1;
 
-  width: 58%;
-  height: 58%;
+  width: 68%;
+  height: 68%;
   display: block;
 
   border-radius: 50%;
   clip-path: circle(50% at 50% 50%);
   object-fit: cover;
 
-  opacity: .9;
   transform-origin: 50% 50%;
   animation: orbitRecordSpin 8s linear infinite;
   will-change: transform;
@@ -229,7 +226,6 @@ body{
   object-fit: contain;
 
   filter: drop-shadow(0px 12px 22px rgba(0,0,0,.14));
-
   transform-origin: 70% 45%;
   animation: slowPan 7s ease-in-out infinite alternate,
              playerPulse 2.4s ease-in-out infinite;
@@ -238,9 +234,8 @@ body{
 }
 
 /* =========================
-   PLATTER (FIXED)
-   - PERFECT circle (no oval)
-   - spins black vinyl using platter.png as mask
+   PLATTER (SPINS + FILLS + CENTERED)
+   - spins BLACK vinyl using platter.png as mask
 ========================= */
 .hero-media .record-spin{
   position: absolute;
@@ -248,17 +243,18 @@ body{
   pointer-events: none;
   isolation: isolate;
 
-  left: 24%;
-  top: 22%;
+  /* tuned: bigger + more centered */
+  left: 23.4%;
+  top: 23.0%;
 
-  width: 33%;
-  height: 33%;            /* <-- force square (prevents oval) */
+  width: 36%;
+  height: 36%;
 
   border-radius: 50%;
-  overflow: hidden;       /* hard circle crop */
+  overflow: hidden;
 }
 
-/* hide the img (only here to keep your HTML unchanged) */
+/* keep HTML unchanged */
 .hero-media .record-spin img{
   opacity: 0;
   width: 1px;
@@ -266,7 +262,7 @@ body{
   position: absolute;
 }
 
-/* spinning black record, shape defined by platter.png mask */
+/* spinning black vinyl */
 .hero-media .record-spin::after{
   content: "";
   position: absolute;
@@ -275,26 +271,26 @@ body{
 
   background:
     radial-gradient(circle at center,
-      #0f0f0f 0%,
-      #0f0f0f 64%,
-      #070707 70%,
+      #0b0b0b 0%,
+      #0b0b0b 64%,
+      #050505 72%,
       #000 100%
     );
 
   -webkit-mask-image: url("platter.png");
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
-  -webkit-mask-size: contain;
+  -webkit-mask-size: 100% 100%;
 
   mask-image: url("platter.png");
   mask-repeat: no-repeat;
   mask-position: center;
-  mask-size: contain;
+  mask-size: 100% 100%;
 
   transform-origin: 50% 50%;
   animation: platterSpin 1.15s linear infinite;
-
   will-change: transform;
+
   backface-visibility: hidden;
   transform: translateZ(0);
 }
@@ -328,7 +324,7 @@ body{
    ANIMATIONS
 ========================= */
 @keyframes platterSpin{
-  to { transform: rotate(360deg); }
+  to { transform: rotate(360deg) translateZ(0); }
 }
 
 @keyframes orbitRecordSpin{
@@ -404,46 +400,19 @@ body{
   }
 
   .shape--orbit::after{
-    width: 72%;
-    height: 72%;
+    width: 76%;
+    height: 76%;
   }
 
   .shape--orbit .orbit-record{
-    width: 62%;
-    height: 62%;
+    width: 70%;
+    height: 70%;
   }
 
   .hero-media .record-spin{
-    width: 40%;
-    height: 40%;
-    left: 22%;
-    top: 20%;
+    width: 42%;
+    height: 42%;
+    left: 21.8%;
+    top: 20.8%;
   }
 }
-/* ===== FINAL TWEAKS (paste at VERY END of styles.css) ===== */
-
-/* 1) PLATTER: slightly LOWER + slightly BIGGER to fill the platter area */
-.hero-media .record-spin{
-  top: 23.2% !important;      /* was 22% -> move DOWN */
-  left: 23.6% !important;     /* tiny nudge left */
-  width: 35% !important;      /* was 33% -> bigger */
-  height: 35% !important;     /* keep square so it stays circular */
-}
-
-/* keep the mask filling the entire box */
-.hero-media .record-spin::after{
-  -webkit-mask-size: 100% 100% !important;
-  mask-size: 100% 100% !important;
-}
-
-/* 2) ORBIT: make the vinyl bigger to hide checker edge */
-.shape--orbit::after{
-  width: 70% !important;      /* was 64% -> bigger white holder */
-  height: 70% !important;
-}
-
-/* vinyl itself bigger inside the holder */
-.shape--orbit .orbit-record{
-  inset: 14% !important;      /* was 18% -> less inset = bigger record */
-}
-
