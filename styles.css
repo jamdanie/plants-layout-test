@@ -219,6 +219,7 @@ body{
 /* player always on top */
 .hero-media > img{
   position: relative;
+  transform-origin: 50% 60%;
   z-index: 4;
   width: 100%;
   height: 100%;
@@ -241,8 +242,8 @@ body{
 }
 
 @keyframes slowPan{
-  from{ transform: scale(1.03); }
-  to{ transform: scale(1.7) translate(-10px,7px); }
+  from{ transform: translate(0,0) rotateX(0deg); }
+  to{ transform: translate(-10px,7px) rotateX(1.2deg); }
 }
 
 @keyframes washPulse{
