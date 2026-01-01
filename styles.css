@@ -231,75 +231,52 @@ body{
 }
 
 /* =========================
-   PLATTER (LOCKED)
-   - container = wobble only
-   - ::after = spin only
+   PLATTER (JPG VERSION)
+   - wobble on container
+   - spin on image
 ========================= */
 .hero-media .record-spin{
   position: absolute;
   z-index: 30;
   pointer-events: none;
-  isolation: isolate;
 
-  /* FINAL NUDGE: slightly LEFT + slightly BIGGER */
-  left: 19.8%;
-  top: 24.3%;
+  /* position (tweak if needed) */
+  left: 21.2%;
+  top: 24.0%;
 
-  width: 49%;
-  height: 49%;
+  /* size (tweak if needed) */
+  width: 46%;
+  height: 46%;
 
   border-radius: 50%;
   overflow: hidden;
 
   transform-origin: 50% 50%;
-  animation: platterWobble 2.2s ease-in-out infinite;
+  animation: platterWobble 2.6s ease-in-out infinite;
+
   will-change: transform;
 }
 
-/* keep HTML unchanged */
 .hero-media .record-spin img{
-  display: none;
-}
+  display: block;
+  opacity: 1;
 
-.hero-media .record-spin::after{
-  content: "";
   position: absolute;
-  inset: -2%;
+  inset: -8%;           /* zoom to hide edge */
+  width: 116%;
+  height: 116%;
+
+  object-fit: cover;
+
   border-radius: 50%;
-
-  background:
-    radial-gradient(circle at center,
-      #0b0b0b 0%,
-      #0b0b0b 64%,
-      #050505 72%,
-      #000 100%
-    );
-
-  -webkit-mask-image: url("platter.png");
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  -webkit-mask-size: 100% 100%;
-
-  mask-image: url("platter.png");
-  mask-repeat: no-repeat;
-  mask-position: center;
-  mask-size: 100% 100%;
+  clip-path: circle(50% at 50% 50%);
 
   transform-origin: 50% 50%;
   animation: platterSpin 1.05s linear infinite;
 
-  backface-visibility: hidden;
   will-change: transform;
+  backface-visibility: hidden;
   transform: translateZ(0);
-}
-
-.hero-media .record-spin::before{
-  content: "";
-  position: absolute;
-  inset: 7%;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,.08);
-  pointer-events: none;
 }
 
 /* =========================
@@ -321,16 +298,14 @@ body{
    ANIMATIONS
 ========================= */
 @keyframes platterSpin{
-  from { transform: translateZ(0) rotate(0deg); }
-  to   { transform: translateZ(0) rotate(360deg); }
+  to { transform: translateZ(0) rotate(360deg); }
 }
 
 @keyframes platterWobble{
-  0%   { transform: translate(0,0) rotate(0deg); }
-  25%  { transform: translate(1.2px,-0.6px) rotate(0.35deg); }
-  50%  { transform: translate(-0.8px,0.9px) rotate(-0.4deg); }
-  75%  { transform: translate(0.6px,-0.4px) rotate(0.25deg); }
-  100% { transform: translate(0,0) rotate(0deg); }
+  0%,100% { transform: translate(0,0); }
+  25%     { transform: translate(0.8px,-0.5px); }
+  50%     { transform: translate(-0.6px,0.7px); }
+  75%     { transform: translate(0.5px,-0.4px); }
 }
 
 @keyframes orbitRecordSpin{
@@ -398,9 +373,9 @@ body{
   }
 
   .hero-media .record-spin{
-    animation: platterWobble 2.2s ease-in-out infinite !important;
+    animation: platterWobble 2.6s ease-in-out infinite !important;
   }
-  .hero-media .record-spin::after{
+  .hero-media .record-spin img{
     animation: platterSpin 1.05s linear infinite !important;
   }
   .shape--orbit .orbit-record{
@@ -436,170 +411,9 @@ body{
   }
 
   .hero-media .record-spin{
-    left: 18.8%;
-    top: 22.3%;
-    width: 52%;
-    height: 52%;
-  }
-}
-/* =========================
-   PLATTER (JPG VERSION – SIMPLE + RELIABLE)
-========================= */
-
-.hero-media .record-spin{
-  position: absolute;
-  z-index: 30;
-  pointer-events: none;
-
-  /* FINAL tuned position */
-  left: 20.5%;
-  top: 24.2%;
-
-  /* FINAL size */
-  width: 48%;
-  aspect-ratio: 1 / 1;
-
-  border-radius: 50%;
-  overflow: hidden;
-
-  /* wobble lives HERE */
-  transform-origin: 50% 50%;
-  animation: platterWobble 2.6s ease-in-out infinite;
-
-  will-change: transform;
-}
-
-/* the vinyl image itself */
-.hero-media .record-spin img{
-  width: 110%;              /* zooms past white edge */
-  height: 110%;
-  object-fit: cover;
-
-  position: absolute;
-  left: -5%;
-  top: -5%;
-
-  border-radius: 50%;
-
-  /* SPIN lives HERE */
-  transform-origin: 50% 50%;
-  animation: platterSpin 1.05s linear infinite;
-
-  will-change: transform;
-  backface-visibility: hidden;
-}
-
-/* =========================
-   PLATTER ANIMATION
-========================= */
-
-@keyframes platterSpin{
-  to { transform: rotate(360deg); }
-}
-
-/* visible analog wobble */
-@keyframes platterWobble{
-  0%   { transform: translate(0,0) rotate(0deg); }
-  25%  { transform: translate(1px,-0.6px) rotate(0.35deg); }
-  50%  { transform: translate(-0.8px,0.8px) rotate(-0.4deg); }
-  75%  { transform: translate(0.6px,-0.4px) rotate(0.25deg); }
-  100% { transform: translate(0,0) rotate(0deg); }
-}
-
-/* =========================
-   ACCESSIBILITY (keep platter moving)
-========================= */
-@media (prefers-reduced-motion: reduce){
-  .hero-media .record-spin{
-    animation: platterWobble 3s ease-in-out infinite !important;
-  }
-  .hero-media .record-spin img{
-    animation: platterSpin 1.4s linear infinite !important;
-  }
-}
-
-/* =========================
-   MOBILE
-========================= */
-@media (max-width: 768px){
-  .hero-media .record-spin{
     left: 19.8%;
     top: 22.5%;
     width: 52%;
-  }
-}
-
-/* =========================
-   FINAL FIX (PASTE AT VERY END)
-   - forces perfect circle
-   - forces actual spin (even if older CSS disables it)
-   - wobble is subtle + does NOT cancel spin
-   - slight re-center
-========================= */
-
-/* 1) platter container (position + wobble only) */
-.hero-media .record-spin{
-  position: absolute !important;
-  z-index: 30 !important;
-  pointer-events: none !important;
-
-  /* re-center: tweak these two numbers */
-  left: 21.2% !important;   /* move RIGHT/LEFT */
-  top: 24.0% !important;    /* move UP/DOWN */
-
-  width: 46% !important;    /* size */
-  height: 46% !important;   /* force square (no oval) */
-
-  border-radius: 50% !important;
-  overflow: hidden !important;
-
-  transform-origin: 50% 50% !important;
-  animation: platterWobble 2.6s ease-in-out infinite !important;
-
-  will-change: transform !important;
-}
-
-/* 2) the actual vinyl image (spin only) */
-.hero-media .record-spin img{
-  display: block !important;     /* overrides any old display:none */
-  opacity: 1 !important;         /* overrides any old opacity:0 */
-
-  position: absolute !important;
-  inset: -8% !important;         /* zoom in to hide white edge */
-  width: 116% !important;
-  height: 116% !important;
-
-  object-fit: cover !important;
-
-  border-radius: 50% !important;
-  clip-path: circle(50% at 50% 50%) !important;  /* HARD circle */
-
-  transform-origin: 50% 50% !important;
-  animation: platterSpin 1.05s linear infinite !important;
-
-  will-change: transform !important;
-  backface-visibility: hidden !important;
-}
-
-/* 3) animations */
-@keyframes platterSpin{
-  to { transform: rotate(360deg); }
-}
-
-/* wobble = tiny drift (no big “back and forth pulse”) */
-@keyframes platterWobble{
-  0%,100% { transform: translate(0,0); }
-  25%     { transform: translate(0.8px,-0.5px); }
-  50%     { transform: translate(-0.6px,0.7px); }
-  75%     { transform: translate(0.5px,-0.4px); }
-}
-
-/* 4) if reduced-motion is enabled, keep ONLY these spinning */
-@media (prefers-reduced-motion: reduce){
-  .hero-media .record-spin{
-    animation: platterWobble 2.6s ease-in-out infinite !important;
-  }
-  .hero-media .record-spin img{
-    animation: platterSpin 1.05s linear infinite !important;
+    height: 52%;
   }
 }
