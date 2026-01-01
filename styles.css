@@ -141,7 +141,7 @@ body{
   overflow: hidden !important;
 
   /* ✅ BASE POSITION (edit these numbers) */
-  --rx: -25px;
+  --rx: -20px;
   --ry: -125px;
 
   transform-origin: 50% 50% !important;
