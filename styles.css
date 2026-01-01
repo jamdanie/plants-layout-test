@@ -71,6 +71,14 @@ body{
   color: rgba(17,17,17,.72);
 }
 
+.hero-content .kicker{
+  font-weight: 650;
+}
+
+.hero-content .desc{
+  margin-top: .8rem;
+}
+
 /* =========================
    SHAPES
 ========================= */
