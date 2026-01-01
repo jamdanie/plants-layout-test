@@ -131,6 +131,8 @@ body{
    circle inside it.
 ---------------------------------------- */
 .shape--orbit{
+  position: absolute;
+  z-index: 1;
   width: 320px;
   height: 320px;
   right: 90px;
@@ -178,12 +180,9 @@ body{
 .hero-media{
   position: relative;
   z-index: 4;
-
   border-radius: 26px;
 
-  /* IMPORTANT:
-     we want the neon plate BEHIND the player, clipped to this box,
-     so it cannot cover the record */
+  /* plate is clipped to this, so it can't spill outside */
   overflow: hidden;
   isolation: isolate;
 
@@ -192,7 +191,7 @@ body{
   box-shadow: 0 20px 60px rgba(0,0,0,.10);
 }
 
-/* SOLID neon plate behind the player (bigger than image, but clipped) */
+/* SOLID neon plate behind the player */
 .hero-media::before{
   content: "";
   position: absolute;
@@ -228,26 +227,24 @@ body{
   filter: drop-shadow(0px 10px 18px rgba(0,0,0,.10));
 }
 
-/* spinning record layer
-   NOTE: put it visually NEAR the player but NOT under it */
+/* spinning record layer (keep it OUTSIDE the player so it never gets covered) */
 .record-spin{
   position: absolute;
-  z-index: 3;                 /* above plates, below player/text */
+  z-index: 3;
   width: 220px;
   height: 220px;
 
-  /* move it UP + LEFT so it doesn't sit behind the player */
-  left: 90px;                 /* tweak */
-  top: 10px;                  /* tweak */
+  /* move it UP + LEFT so it does NOT sit under hero-media */
+  left: 90px;
+  top: 10px;
 
   border-radius: 50%;
-  overflow: hidden;           /* circle mask prevents spinning-square look */
+  overflow: hidden;
   pointer-events: none;
-
   filter: drop-shadow(0 14px 24px rgba(0,0,0,.12));
 }
 
-/* record neon plate (solid + circular) behind the record image */
+/* solid neon plate behind the record */
 .record-spin::before{
   content: "";
   position: absolute;
@@ -278,7 +275,7 @@ body{
   object-fit: cover;
 
   transform-origin: 50% 50%;
-  animation: recordSpin 1.85s linear infinite; /* slightly slower */
+  animation: recordSpin 1.85s linear infinite;
 }
 
 /* ---------------------------------------
@@ -325,7 +322,6 @@ body{
   50%{ transform: translate(12px, 10px) scale(1.06); }
 }
 
-/* pulsing / fading like the example */
 @keyframes washPulse{
   0%,100%{ opacity: .92; transform: scale(1); }
   50%{ opacity: 1; transform: scale(1.02); }
