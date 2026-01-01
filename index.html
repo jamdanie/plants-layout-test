@@ -7,62 +7,67 @@
   <title>Layout Test</title>
   <meta name="description" content="UW student layout test inspired by aganaplocha.com" />
 
+  <!-- Optional favicon -->
+  <link rel="icon" href="favicon.ico" />
+
   <link rel="stylesheet" href="styles.css" />
 
+  <!-- Performance: connection warmup -->
   <link rel="preconnect" href="https://images.rawpixel.com" crossorigin />
   <link rel="preconnect" href="https://skybygramophone.com" crossorigin />
 
+  <!-- Optional: preload ONLY the main hero image (one is enough) -->
   <link
     rel="preload"
     as="image"
     href="https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807"
     fetchpriority="high"
   />
-</head>
 
-<body>
+  <!-- If JS is disabled, stop animations -->
   <noscript>
     <style>
       .record-spin img,
       .hero-media img { animation: none !important; }
     </style>
   </noscript>
+</head>
 
-  <main class="page">
+<body>
+  <!-- Accessibility: skip link -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <main id="main">
     <section class="hero" aria-label="Hero layout demo">
       <div class="hero-card">
 
-        <!-- background shapes -->
+        <!-- background shapes (decorative) -->
         <div class="shape shape--blob" aria-hidden="true"></div>
         <div class="shape shape--circle" aria-hidden="true"></div>
         <div class="shape shape--ring" aria-hidden="true"></div>
         <div class="shape shape--dot" aria-hidden="true"></div>
         <div class="shape shape--spark" aria-hidden="true"></div>
 
-        <!-- moving ring on right -->
+        <!-- moving ring on right (decorative) -->
         <div class="shape shape--orbit" aria-hidden="true"></div>
 
-        <!-- neon plate behind player -->
-        <div class="player-plate" aria-hidden="true"></div>
-
-        <!-- spinning record -->
+        <!-- spinning record (decorative) -->
         <div class="record-spin" aria-hidden="true">
           <img
             src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDI0LTA3L3NtYWxsZGVzaWduY29tcGFueTAxX3ZpbnRhZ2VfcGFpbnRpbmdfb2ZfdmlueWxfcmVjb3JkX3BlbmNpbF9jb18zMzI1Zjg4OC0xMDRkLTQyNzQtYWRlZi02NDQxNTVjMDEyZTMucG5n.png"
             alt=""
-            loading="eager"
             decoding="async"
-            fetchpriority="high"
+            loading="eager"
           />
         </div>
 
-        <!-- main media -->
+        <!-- main media (meaningful content) -->
         <figure class="hero-media">
           <img
             src="https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807"
             alt="Turntable product image"
             decoding="async"
-            fetchpriority="high"
+            loading="eager"
           />
         </figure>
 
