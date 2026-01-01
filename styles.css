@@ -393,3 +393,43 @@ body{
     top: 20%;
   }
 }
+/* =========================================================
+   FIX PATCH (paste at END of styles.css)
+   - platter ALWAYS spins
+   - orbit record stays inside the orbit ring + no checker edge
+========================================================= */
+
+/* --- A) PLATTER: spin the container (most reliable) --- */
+.hero-media .record-spin{
+  /* keep your size/position, just guarantee spin */
+  animation: platterSpin 1.15s linear infinite !important;
+  transform-origin: 50% 50%;
+}
+
+/* IMPORTANT: stop animating the pseudo so we don’t “double-spin” */
+.hero-media .record-spin::after{
+  animation: none !important;
+}
+
+/* --- B) ORBIT: lock image inside the ring --- */
+.shape--orbit{
+  display: grid;
+  place-items: center;
+  overflow: hidden;          /* keeps anything from spilling out */
+}
+
+.shape--orbit .orbit-record{
+  position: relative !important; /* overrides absolute/inset if you had it */
+  width: 62% !important;
+  height: 62% !important;
+
+  object-fit: cover;
+  border-radius: 50%;
+  clip-path: circle(50% at 50% 50%);
+
+  /* hides the PNG's checker edge */
+  border: 10px solid rgba(255,255,255,0.95);
+
+  /* keep the subtle spin */
+  animation: orbitRecordSpin 8s linear infinite !important;
+}
