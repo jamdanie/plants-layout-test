@@ -146,7 +146,6 @@ body{
   animation: orbitDrift 7.2s ease-in-out infinite, ringFade 4.8s ease-in-out infinite;
 }
 
-/* inner solid circle */
 .shape--orbit::before{
   content: "";
   position: absolute;
@@ -165,56 +164,55 @@ body{
 
 /* ---------------------------------------
    FOREGROUND LAYERS
-   shapes(1) -> plate(2) -> record(3) -> player/text(4)
+   shapes(1) -> glows(2) -> record(3) -> player/text(4)
 ---------------------------------------- */
 
-/* text top layer */
 .hero-content{
   position: relative;
   z-index: 4;
 }
 
-/* record player container (top layer) */
+/* record player container */
 .hero-media{
   position: relative;
   z-index: 4;
   border-radius: 26px;
-
-  /* IMPORTANT: do NOT clip neon behind/around it */
-  overflow: visible;
-
-  aspect-ratio: 4 / 3;
   background: transparent;
   box-shadow: 0 20px 60px rgba(0,0,0,.10);
+  overflow: visible; /* glow can extend */
+  isolation: isolate;
 }
 
-/* SOLID neon plate BEHIND the player (separate layer, not inside hero-media) */
-.player-plate{
+/* OUTSIDE-ONLY glow: we draw a duplicate, blur it HARD, then hide its "fill" by lowering opacity and relying on drop-shadows */
+.hero-media::before{
+  content: "";
   position: absolute;
-  z-index: 2; /* shapes=1 → plate=2 → record=3 → player/text=4 */
+  inset: -8%;
+  z-index: 0;
   pointer-events: none;
 
-  width: min(540px, 52vw);
-  aspect-ratio: 4 / 3;
+  background-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 
-  /* place it behind the left image area */
-  left: 4rem;
-  top: 50%;
-  transform: translateY(-50%);
+  transform: scale(1.06);
 
-  border-radius: 26px;
+  /* KEY: keep the base nearly invisible so it doesn't "fill" the transparent parts */
+  opacity: .14;
 
-  background:
-    radial-gradient(circle at 28% 35%, rgba(255, 0, 170, .95), rgba(255, 0, 170, .25) 60%, transparent 72%),
-    radial-gradient(circle at 65% 55%, rgba(130, 0, 255, .75), rgba(130, 0, 255, .18) 62%, transparent 80%),
-    radial-gradient(circle at 78% 40%, rgba(0, 220, 255, .50), rgba(0, 220, 255, .12) 65%, transparent 82%);
+  filter:
+    blur(7px)
+    saturate(2.4)
+    contrast(1.05)
+    drop-shadow(0 0 22px rgba(255, 0, 170, .70))
+    drop-shadow(0 0 26px rgba(130, 0, 255, .55))
+    drop-shadow(0 0 22px rgba(0, 220, 255, .32));
 
-  filter: blur(18px) saturate(1.65) contrast(1.05);
-  opacity: .95;
-  animation: platePulse 5.2s ease-in-out infinite;
+  mix-blend-mode: screen;
+  animation: playerGlow 5.2s ease-in-out infinite;
 }
 
-/* actual player image */
 .hero-media img{
   position: relative;
   z-index: 1;
@@ -230,30 +228,31 @@ body{
   filter: drop-shadow(0px 12px 22px rgba(0,0,0,.14));
 }
 
+@keyframes playerGlow{
+  0%,100%{ transform: scale(1.06); opacity: .12; }
+  50%{ transform: scale(1.09); opacity: .18; }
+}
+
 /* spinning record container */
 .record-spin{
   position: absolute;
-  z-index: 3;                 /* above plate, below player */
+  z-index: 3;
   width: 220px;
   height: 220px;
   left: 90px;
   top: 10px;
 
-  border-radius: 50%;
-  overflow: visible;
   pointer-events: none;
-
-  /* IMPORTANT: keep glow + image layered reliably */
   isolation: isolate;
 }
 
-/* SOLID deep neon circle behind the record (VISIBLE) */
+/* deep neon circle BEHIND the record */
 .record-spin::before{
   content: "";
   position: absolute;
   inset: -22%;
   border-radius: 50%;
-  z-index: 0; /* NOT negative */
+  z-index: 0;
 
   background:
     radial-gradient(circle at 30% 30%,
@@ -268,7 +267,7 @@ body{
   animation: recordGlow 4.6s ease-in-out infinite;
 }
 
-/* actual spinning record image */
+/* the record image itself — CLIPPED TO A CIRCLE */
 .record-spin img{
   position: relative;
   z-index: 1;
@@ -279,7 +278,9 @@ body{
   display: block;
   object-fit: cover;
 
-  border-radius: 50%; /* mask any corners */
+  border-radius: 50%;
+  clip-path: circle(50% at 50% 50%);
+
   transform-origin: 50% 50%;
   animation: recordSpin 1.85s linear infinite;
 }
@@ -343,11 +344,6 @@ body{
   50%{ opacity: 1; transform: scale(1.04); }
 }
 
-@keyframes platePulse{
-  0%,100%{ transform: translateY(-50%) scale(1.02); opacity: .92; }
-  50%{ transform: translateY(-50%) scale(1.06); opacity: 1; }
-}
-
 @keyframes orbitDrift{
   0%,100%{ transform: translateX(0); }
   50%{ transform: translateX(-80px); }
@@ -393,10 +389,5 @@ body{
 
   .shape--orbit::before{
     inset: 58px;
-  }
-
-  .player-plate{
-    left: 2.5rem;
-    width: min(520px, 86vw);
   }
 }
