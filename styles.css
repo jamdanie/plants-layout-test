@@ -443,72 +443,68 @@ body{
   }
 }
 /* =========================================================
-   FINAL PLATTER PATCH (single source of truth)
-   - move platter slightly LEFT
-   - guaranteed spin on ::after
-   - visible wobble on container
+   PLATTER FIX (no mask)
+   - uses the real platter.png image
+   - hard circle crop (so it can’t become a blob)
+   - spin + visible wobble
 ========================================================= */
 
-/* platter container = wobble only */
+/* Position + wobble (container only) */
 .hero-media .record-spin{
-  left: 19.8% !important;   /* move LEFT a bit */
-  top: 24.3% !important;
+  position: absolute !important;
+  z-index: 30 !important;
+  pointer-events: none !important;
 
-  width: 49% !important;    /* a bit bigger */
-  height: 49% !important;   /* keep circle */
+  left: 20.2% !important;   /* tweak left/right here */
+  top: 24.3% !important;    /* tweak up/down here */
+
+  width: 49% !important;    /* tweak size here */
+  height: 49% !important;
 
   border-radius: 50% !important;
   overflow: hidden !important;
 
   transform-origin: 50% 50% !important;
   animation: platterWobble 2.2s ease-in-out infinite !important;
-  will-change: transform;
+  will-change: transform !important;
 }
 
-/* hide the real img so it never interferes */
+/* The image is the spinning record */
 .hero-media .record-spin img{
-  display: none !important;
-}
+  display: block !important;
+  opacity: 1 !important;
 
-/* spinning layer = spin only */
-.hero-media .record-spin::after{
-  content: "" !important;
-  position: absolute !important;
-  inset: -2% !important;     /* tiny overscan so edges fill */
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: cover !important;      /* fills circle */
+  object-position: center !important;
+
   border-radius: 50% !important;
-
-  background:
-    radial-gradient(circle at center,
-      #0b0b0b 0%,
-      #0b0b0b 64%,
-      #050505 72%,
-      #000 100%
-    ) !important;
-
-  -webkit-mask-image: url("platter.png") !important;
-  -webkit-mask-repeat: no-repeat !important;
-  -webkit-mask-position: center !important;
-  -webkit-mask-size: 100% 100% !important;
-
-  mask-image: url("platter.png") !important;
-  mask-repeat: no-repeat !important;
-  mask-position: center !important;
-  mask-size: 100% 100% !important;
+  clip-path: circle(50% at 50% 50%) !important;
 
   transform-origin: 50% 50% !important;
   animation: platterSpin 1.05s linear infinite !important;
 
   backface-visibility: hidden !important;
   transform: translateZ(0) rotate(0deg) !important;
-  will-change: transform;
+  will-change: transform !important;
 }
 
-/* spin keyframes (define ONCE) */
+/* Kill the old mask layer so it can’t interfere */
+.hero-media .record-spin::after{
+  content: none !important;
+}
+.hero-media .record-spin::before{
+  content: none !important;
+}
+
+/* Spin */
 @keyframes platterSpin{
   to { transform: translateZ(0) rotate(360deg); }
 }
 
-/* wobble keyframes (define ONCE) */
+/* Visible wobble */
 @keyframes platterWobble{
   0%   { transform: translate(0,0) rotate(0deg); }
   25%  { transform: translate(1.2px,-0.6px) rotate(0.35deg); }
@@ -517,16 +513,12 @@ body{
   100% { transform: translate(0,0) rotate(0deg); }
 }
 
-/* If reduced-motion is ON, your earlier rule may disable animations.
-   This re-enables ONLY the platter + orbit record. */
+/* If reduced motion is enabled, keep platter motion anyway */
 @media (prefers-reduced-motion: reduce){
   .hero-media .record-spin{
     animation: platterWobble 2.2s ease-in-out infinite !important;
   }
-  .hero-media .record-spin::after{
+  .hero-media .record-spin img{
     animation: platterSpin 1.05s linear infinite !important;
-  }
-  .shape--orbit .orbit-record{
-    animation: orbitRecordSpin 8s linear infinite !important;
   }
 }
