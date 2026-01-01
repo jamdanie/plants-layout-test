@@ -455,8 +455,8 @@ body{
   left: 20.4% !important;   /* was ~19.2% → move RIGHT slightly */
   top: 24.3% !important;
 
-  width: 44% !important;
-  height: 44% !important;
+  width: 46% !important;    /* was 44% */
+  height: 46% !important;   /* was 44% */
 
   border-radius: 50%;
   overflow: hidden;
