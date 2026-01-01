@@ -179,7 +179,7 @@ body{
 ========================= */
 .hero-media{
   position: relative;
-  margin-top: 48px;           /* move player down */
+  margin-top: 64px;           /* move player down */
   z-index: 7;
 
   /* sizing lock */
