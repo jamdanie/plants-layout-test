@@ -86,6 +86,10 @@ body{
   z-index: 7;
   max-width: 560px;
   aspect-ratio: 4 / 3;
+
+  /* ✅ ONE shared “center” for ring + record */
+  --cx: -18px;   /* was --rx */
+  --cy: -125px;  /* was --ry */
 }
 
 /* neon plates */
@@ -126,14 +130,15 @@ body{
 
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+
+  /* ✅ locked to SAME center as record */
+  transform: translate(calc(-50% + var(--cx)), calc(-50% + var(--cy)));
 
   width: 460px;
   height: 460px;
   border-radius: 50%;
   border: 18px solid rgba(255,0,170,.18);
 
-  /* between plates and record */
   z-index: 2;
 
   animation: spin 18s linear infinite;
@@ -156,12 +161,8 @@ body{
   border-radius: 50%;
   overflow: hidden;
 
-  /* nudges */
-  --rx: -18px;
-  --ry: -125px;
-
-  /* base position */
-  transform: translate(calc(-50% + var(--rx)), calc(-50% + var(--ry)));
+  /* ✅ locked to SAME center as ring */
+  transform: translate(calc(-50% + var(--cx)), calc(-50% + var(--cy)));
   transform-origin: 50% 50%;
 
   animation: platterWobble 2.6s ease-in-out infinite;
