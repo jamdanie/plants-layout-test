@@ -410,4 +410,16 @@ body{
     width: 52%;
   }
 }
+/* ===== FINAL ALIGN: move spinning record UP + center with ring (paste at END) ===== */
+.hero-media .record-spin{
+  left: 21.2% !important;  /* keep horizontal center */
+  top: 18.6% !important;   /* move UP to align with the big ring */
+}
+
+/* (optional) if you still see a tiny “not perfect circle” edge, keep this */
+.hero-media .record-spin,
+.hero-media .record-spin img{
+  border-radius: 50% !important;
+  clip-path: circle(50% at 50% 50%) !important;
+}
 
