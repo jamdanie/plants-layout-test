@@ -136,7 +136,7 @@ body{
   place-items: center;
 }
 
-/* bigger holder so checker edge is hidden */
+/* holder hides checker edges */
 .shape--orbit::after{
   content: "";
   position: absolute;
@@ -232,8 +232,9 @@ body{
 }
 
 /* =========================
-   PLATTER (BIGGER + LEFT + GUARANTEED SPIN)
-   IMPORTANT: only the ::after spins (no conflicting transforms)
+   PLATTER (OFFSET FIX + SPIN + WOBBLE)
+   - container handles wobble ONLY
+   - ::after handles rotation ONLY
 ========================= */
 .hero-media .record-spin{
   position: absolute;
@@ -241,30 +242,33 @@ body{
   pointer-events: none;
   isolation: isolate;
 
-  /* tuned: bigger + more left + a touch down */
-  left: 20.2%;
-  top: 24.0%;
+  /* FIX: nudge it LEFT a bit + slightly down */
+  left: 19.2%;
+  top: 24.3%;
 
+  /* keep it circular */
   width: 44%;
   height: 44%;
-
   border-radius: 50%;
   overflow: hidden;
 
-  /* do NOT animate container */
-  transform: none;
+  /* wobble so you can *see* motion */
+  transform-origin: 50% 50%;
+  animation: platterWobble 2.8s ease-in-out infinite;
+
+  will-change: transform;
 }
 
-/* hide the img (we keep it only so your HTML stays the same) */
+/* keep HTML unchanged */
 .hero-media .record-spin img{
   display: none;
 }
 
-/* the spinning black vinyl */
+/* the spinning vinyl layer */
 .hero-media .record-spin::after{
   content: "";
   position: absolute;
-  inset: -2%;              /* tiny overscan so it fills edge */
+  inset: -2%;
   border-radius: 50%;
 
   background:
@@ -325,6 +329,12 @@ body{
   to { transform: rotate(360deg) translateZ(0); }
 }
 
+/* visible wobble */
+@keyframes platterWobble{
+  0%,100% { transform: translate(0,0) rotate(0deg); }
+  50%     { transform: translate(0.7px,-0.6px) rotate(0.35deg); }
+}
+
 @keyframes orbitRecordSpin{
   to { transform: rotate(360deg); }
 }
@@ -375,7 +385,7 @@ body{
 
 /* =========================
    ACCESSIBILITY
-   Stop the heavy motion, but KEEP platter + orbit spinning.
+   reduce most motion, but KEEP platter + orbit spinning
 ========================= */
 @media (prefers-reduced-motion: reduce){
   .shape--blob,
@@ -389,6 +399,9 @@ body{
     animation: none !important;
   }
 
+  .hero-media .record-spin{
+    animation: platterWobble 2.8s ease-in-out infinite !important;
+  }
   .hero-media .record-spin::after{
     animation: platterSpin 1.05s linear infinite !important;
   }
@@ -425,10 +438,9 @@ body{
   }
 
   .hero-media .record-spin{
-    left: 19.8%;
-    top: 22.0%;
+    left: 18.8%;
+    top: 22.3%;
     width: 50%;
     height: 50%;
   }
 }
-
