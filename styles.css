@@ -183,7 +183,7 @@ body{
   aspect-ratio: 1 / 1;
 
   left: 24%;
-  top: 27%;            /* was ~30% → moved UP */
+  top: 25%;            /* was ~27% → moved UP */
 
   pointer-events: none;
   isolation: isolate;
