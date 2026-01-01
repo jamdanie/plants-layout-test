@@ -177,13 +177,13 @@ body{
    SPINNING RECORD (ON PLAYER)
 ========================= */
 .hero-media .record-spin{
-  position:absolute;
-  z-index:25;
-  width:44%;
-  aspect-ratio:1/1;
-  left:22%;
-  top:21%;
-  pointer-events:none;
+  position: absolute;
+  z-index: 25;
+  width: 36%;          /* WAS 44% — smaller */
+  aspect-ratio: 1 / 1;
+  left: 24%;           /* tweak left/right */
+  top: 30%;            /* tweak up/down */
+  pointer-events: none;
 }
 
 .hero-media .record-spin::before{
@@ -202,14 +202,13 @@ body{
 }
 
 .hero-media .record-spin img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  border-radius:50%;
-  clip-path:circle(50%);
-  animation:
-    recordSpinFast 1.05s linear infinite,
-    recordWobble 2.8s ease-in-out infinite;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  clip-path: circle(50%);
+  transform-origin: 50% 50%;
+  animation: recordSpinFast 1.05s linear infinite;
 }
 
 /* =========================
