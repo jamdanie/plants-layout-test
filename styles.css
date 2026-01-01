@@ -313,100 +313,20 @@ body{
     animation: none !important;
   }
 
-  
-  }
+  /* keep ONLY the records moving */
   .shape--orbit .orbit-record{
     animation: orbitRecordSpin 8s linear infinite !important;
   }
-}
-
-/* =========================
-   MOBILE
-========================= */
-@media (max-width: 768px){
-  .hero-card{
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 2.5rem;
-  }
-
-  .shape--orbit{
-    right: 20px;
-    top: -60px;
-    width: 260px;
-    height: 260px;
-  }
-
-  .shape--orbit::after{
-    width: 84%;
-    height: 84%;
-  }
-
-  .shape--orbit .orbit-record{
-    width: 80%;
-    height: 80%;
-  }
 
   .hero-media .record-spin{
-    left: 19.8%;
-    top: 22.5%;
-    width: 52%;
-    height: 52%;
+    animation: platterWobble 2.6s ease-in-out infinite !important;
+  }
+
+  .hero-media .record-spin img{
+    animation: platterSpin 1.05s linear infinite !important;
   }
 }
-/* =========================
-   PLATTER (JPG) — CLEAN + PERFECT CIRCLE
-   Keeps your current position.
-   - container = wobble only
-   - image = spin only
-========================= */
 
-.hero-media .record-spin{
-  position: absolute;
-  z-index: 30;
-  pointer-events: none;
-
-  /* ✅ KEEP THESE (your position is perfect) */
-  left: 21.2%;
-  top: 24.0%;
-  width: 46%;
-
-  /* ✅ force a real square so circle is perfect */
-  aspect-ratio: 1 / 1;
-  height: auto;
-
-  border-radius: 50%;
-  overflow: hidden;
-
-  transform-origin: 50% 50%;
-  animation: platterWobble 2.6s ease-in-out infinite;
-  will-change: transform;
-}
-
-/* Spin the actual record image */
-.hero-media .record-spin img{
-  display: block;
-  position: absolute;
-
-  /* center perfectly */
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(1.16); /* zoom hides white edge */
-
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-
-  border-radius: 50%;
-  -webkit-clip-path: circle(50% at 50% 50%);
-  clip-path: circle(50% at 50% 50%);
-
-  transform-origin: 50% 50%;
-  animation: platterSpin 1.05s linear infinite;
-
-  will-change: transform;
-  backface-visibility: hidden;
-}
 
 /* spin */
 @keyframes platterSpin{
@@ -423,6 +343,92 @@ body{
 
 /* keep platter moving even with reduced motion enabled */
 @media (prefers-reduced-motion: reduce){
+  .hero-media .record-spin{
+    animation: platterWobble 2.6s ease-in-out infinite !important;
+  }
+  .hero-media .record-spin img{
+    animation: platterSpin 1.05s linear infinite !important;
+  }
+}
+/* =========================
+   PLATTER (JPG) — PERFECT CIRCLE (KEEP POSITION)
+========================= */
+
+.hero-media .record-spin{
+  position: absolute;
+  z-index: 30;
+  pointer-events: none;
+
+  /* ✅ keep your perfect position */
+  left: 21.2%;
+  top: 24.0%;
+
+  /* ✅ force a square */
+  width: 46%;
+  height: 46%;
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  /* wobble only on the container */
+  transform-origin: 50% 50%;
+  animation: platterWobble 2.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.hero-media .record-spin img{
+  position: absolute;
+
+  /* ✅ zoom in so edges stay clean */
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+
+  object-fit: cover;
+
+  /* ✅ hard circle crop */
+  border-radius: 50%;
+  -webkit-clip-path: circle(50% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
+
+  /* spin only on the image */
+  transform-origin: 50% 50%;
+  animation: platterSpin 1.05s linear infinite;
+
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* spin */
+@keyframes platterSpin{
+  to { transform: rotate(360deg); }
+}
+
+/* wobble (subtle) */
+@keyframes platterWobble{
+  0%,100% { transform: translate(0,0); }
+  25%     { transform: translate(0.7px,-0.4px); }
+  50%     { transform: translate(-0.6px,0.6px); }
+  75%     { transform: translate(0.5px,-0.3px); }
+}
+
+/* accessibility: keep platter + orbit spinning */
+@media (prefers-reduced-motion: reduce){
+  .shape--blob,
+  .shape--circle,
+  .shape--ring,
+  .shape--dot,
+  .shape--orbit,
+  .hero-media::before,
+  .hero-media::after,
+  .hero-media > img{
+    animation: none !important;
+  }
+
+  .shape--orbit .orbit-record{
+    animation: orbitRecordSpin 8s linear infinite !important;
+  }
+
   .hero-media .record-spin{
     animation: platterWobble 2.6s ease-in-out infinite !important;
   }
