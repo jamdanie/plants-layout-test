@@ -195,7 +195,7 @@ body{
   left: 50%;
   top: 50%;
 
-  width: calc(var(--ringSize) - 36px);
+  width: calc(var(--ringSize) - 48px);
   aspect-ratio: 1 / 1;
 
   border-radius: 50%;
