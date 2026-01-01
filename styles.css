@@ -416,3 +416,56 @@ body{
     top: 20.8%;
   }
 }
+
+/* ===== FINAL FIX PATCH (paste at VERY END of styles.css) ===== */
+
+/* 1) PLATTER: move DOWN + RIGHT + make BIGGER + FORCE ROTATION */
+.hero-media .record-spin{
+  left: 24.2% !important;   /* right a bit (was ~23.4%) */
+  top: 24.0% !important;    /* down a bit (was ~23.0%) */
+  width: 38% !important;    /* bigger */
+  height: 38% !important;   /* keep square */
+
+  /* backup spin in case ::after gets overridden */
+  animation: platterContainerSpin 1.15s linear infinite !important;
+  transform-origin: 50% 50% !important;
+}
+
+/* force the actual vinyl layer to spin no matter what */
+.hero-media .record-spin::after{
+  animation: platterSpin 1.15s linear infinite !important;
+  transform-origin: 50% 50% !important;
+}
+
+/* backup keyframes (container spin) */
+@keyframes platterContainerSpin{
+  to { transform: rotate(360deg); }
+}
+
+/* 2) ORBIT: remove checker edge by oversizing + adding white outline */
+.shape--orbit{
+  display: grid !important;
+  place-items: center !important;
+}
+
+.shape--orbit::after{
+  width: 78% !important;     /* bigger white backing disc */
+  height: 78% !important;
+  background: #fff !important;
+}
+
+/* make the record slightly larger than the backing disc and crop */
+.shape--orbit .orbit-record{
+  width: 76% !important;     /* bigger record to cover edge */
+  height: 76% !important;
+
+  /* overscale inside its circle so transparent edge disappears */
+  transform: scale(1.10);
+  animation: orbitRecordSpin 8s linear infinite !important;
+  transform-origin: 50% 50%;
+  will-change: transform;
+
+  /* hides remaining jagged edge */
+  outline: 10px solid #fff;
+  outline-offset: -2px;
+}
