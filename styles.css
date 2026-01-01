@@ -141,7 +141,7 @@ body{
   overflow: hidden;
 
   /* ✅ FINAL NUDGE — RIGHT + DOWN */
-  transform: translate(-50%, -50%) translate(-28px, -130px);
+  transform: translate(-50%, -50%) translate(-25px, -126px);
 
   animation: platterWobble 2.6s ease-in-out infinite;
 }
