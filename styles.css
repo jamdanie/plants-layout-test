@@ -77,26 +77,6 @@ body{
   animation: floaty 10s ease-in-out infinite;
 }
 
-.shape--ring{
-  position: absolute;
-  pointer-events: none;
-
-  /* centered in hero-media */
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-
-  width: 460px;
-  height: 460px;
-  border-radius: 50%;
-  border: 18px solid rgba(255,0,170,.18);
-
-  /* layer it between plates and record if you want */
-  z-index: 2;
-
-  animation: spin 18s linear infinite;
-}
-
 /* =========================
    PLAYER
 ========================= */
@@ -115,7 +95,8 @@ body{
   position:absolute;
   inset:-12%;
   pointer-events:none;
-  /* ✅ Chrome/Edge need this */
+
+  /* ✅ Chrome/Edge require -webkit-mask */
   -webkit-mask: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807") center / contain no-repeat;
   mask: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807") center / contain no-repeat;
 
@@ -137,12 +118,34 @@ body{
 }
 
 /* =========================
-   SPINNING RECORD (FINAL)
+   RING (inside hero-media)
+========================= */
+.hero-media .shape--ring{
+  position: absolute;
+  pointer-events: none;
+
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 460px;
+  height: 460px;
+  border-radius: 50%;
+  border: 18px solid rgba(255,0,170,.18);
+
+  /* between plates and record */
+  z-index: 2;
+
+  animation: spin 18s linear infinite;
+}
+
+/* =========================
+   SPINNING RECORD
 ========================= */
 .hero-media .record-spin{
   position: absolute;
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
 
   left: 50%;
   top: 50%;
@@ -153,11 +156,11 @@ body{
   border-radius: 50%;
   overflow: hidden;
 
-  /* your nudges */
+  /* nudges */
   --rx: -18px;
   --ry: -125px;
 
-  /* BASE position: always centered + nudged */
+  /* base position */
   transform: translate(calc(-50% + var(--rx)), calc(-50% + var(--ry)));
   transform-origin: 50% 50%;
 
@@ -180,7 +183,7 @@ body{
 /* player always on top */
 .hero-media > img{
   position: relative;
-  z-index: 3;
+  z-index: 4;
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -211,6 +214,7 @@ body{
   50%{ opacity:1; }
 }
 
+/* ✅ rotate property so it doesn't overwrite translate() centering */
 @keyframes spin{
   to { rotate: 360deg; }
 }
