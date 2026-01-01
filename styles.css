@@ -417,68 +417,27 @@ body{
   }
 }
 
-/* ===== FINAL LOCK: LEFT ALIGN + GUARANTEED SPIN ===== */
+/* ===== LAST FIX: platter LEFT + spin (even if reduced-motion is on) ===== */
 
-/* 1) Platter container — POSITION ONLY */
+/* Nudge platter LEFT a bit */
 .hero-media .record-spin{
-  left: 21.8% !important;     /* move LEFT */
+  left: 20.9% !important;   /* was 21.8% -> move LEFT */
   top: 23.6% !important;
-
-  width: 44% !important;
-  height: 44% !important;
-
-  border-radius: 50% !important;
-  overflow: hidden !important;
-
-  animation: none !important;
-  transform: none !important;
-  will-change: auto !important;
 }
 
-/* 2) The ONLY spinning layer */
+/* Force the spin on the spinning layer */
 .hero-media .record-spin::after{
-  content: "";
-  position: absolute;
-  inset: -2% !important;     /* edge bleed so it fills cleanly */
-  border-radius: 50%;
-
-  background:
-    radial-gradient(circle at center,
-      #0b0b0b 0%,
-      #0b0b0b 64%,
-      #050505 72%,
-      #000 100%
-    );
-
-  -webkit-mask-image: url("platter.png");
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  -webkit-mask-size: 100% 100%;
-
-  mask-image: url("platter.png");
-  mask-repeat: no-repeat;
-  mask-position: center;
-  mask-size: 100% 100%;
-
-  transform-origin: 50% 50% !important;
   animation: platterSpin 1.05s linear infinite !important;
-
-  backface-visibility: hidden;
-  will-change: transform;
-  transform: translateZ(0);
 }
 
-/* 3) Safety — image never interferes */
-.hero-media .record-spin img{
-  display: none !important;
-}
-
-/* 4) Mobile */
-@media (max-width: 768px){
-  .hero-media .record-spin{
-    left: 21% !important;
-    top: 21.8% !important;
-    width: 48% !important;
-    height: 48% !important;
+/* If Reduce Motion is ON, your earlier *{animation:none} cancels everything.
+   This re-enables ONLY the platter + orbit record. */
+@media (prefers-reduced-motion: reduce){
+  .hero-media .record-spin::after{
+    animation: platterSpin 1.05s linear infinite !important;
+  }
+  .shape--orbit .orbit-record{
+    animation: orbitRecordSpin 8s linear infinite !important;
   }
 }
+
