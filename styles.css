@@ -341,4 +341,104 @@ body{
     transition: none !important;
   }
 }
+/* =========================================================
+   PATCH: platter alignment + guaranteed spin
+   - spins the cropped platter image (platter.png)
+   - moves it slightly UP for better alignment
+   - moves the old vinyl into the right orbit ring
+========================================================= */
+
+/* --- the orbit ring now holds a vinyl image --- */
+.shape--orbit{
+  display: grid;
+  place-items: center;
+}
+
+.shape--orbit .orbit-record{
+  width: 62%;
+  height: auto;
+  display: block;
+  border-radius: 50%;
+  clip-path: circle(50%);
+  opacity: .95;
+
+  /* subtle spin inside the drifting ring */
+  animation: orbitVinylSpin 6.5s linear infinite;
+  will-change: transform;
+}
+
+@keyframes orbitVinylSpin{
+  to { transform: rotate(360deg); }
+}
+
+/* --- platter record on the player --- */
+.hero-media{
+  position: relative; /* ensure record anchors to the player */
+}
+
+/* container wobble (so we don't fight the rotate animation on the img) */
+.hero-media .record-spin{
+  position: absolute;
+  z-index: 25;
+  pointer-events: none;
+  isolation: isolate;
+
+  /* SIZE: a bit smaller than before */
+  width: 32%;
+  aspect-ratio: 1 / 1;
+
+  /* POSITION: move UP a touch for alignment */
+  left: 24%;
+  top: 22%;
+
+  animation: recordWobble 2.8s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* the spinning platter image */
+.hero-media .record-spin img{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+
+  /* IMPORTANT: spin uses its own transform (no conflicts now) */
+  transform-origin: 50% 50%;
+  animation: recordSpinFast 1.05s linear infinite;
+  will-change: transform;
+
+  /* keep edges clean */
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.18));
+}
+
+/* spin + tiny wobble */
+@keyframes recordSpinFast{
+  to { transform: rotate(360deg); }
+}
+
+@keyframes recordWobble{
+  0%,100% { transform: translate(0,0) rotate(0deg); }
+  50%     { transform: translate(0.6px,-0.6px) rotate(0.35deg); }
+}
+
+/* optional: "playing" pulse on the whole player image (subtle) */
+.hero-media > img{
+  animation:
+    slowPan 7s ease-in-out infinite alternate,
+    playerPlayingPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes playerPlayingPulse{
+  0%,100% { transform: scale(1) translateZ(0); }
+  50%     { transform: scale(1.012) translateZ(0); }
+}
+
+/* mobile tweak */
+@media (max-width: 768px){
+  .hero-media .record-spin{
+    width: 38%;
+    left: 22%;
+    top: 20%;
+  }
+}
 
