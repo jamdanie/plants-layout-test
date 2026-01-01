@@ -125,6 +125,7 @@ body{
   /* ✅ ONE shared “center” for ring + record */
   --cx: -18px;   /* was --rx */
   --cy: -125px;  /* was --ry */
+  --ringSize: min(460px, 92%);
 }
 
 /* neon plates */
@@ -170,7 +171,7 @@ body{
   transform: translate(calc(-50% + var(--cx)), calc(-50% + var(--cy)));
 
   /* ✅ responsive ring size */
-  width: min(460px, 92%);
+  width: var(--ringSize);
   aspect-ratio: 1 / 1;
   height: auto;
 
@@ -194,7 +195,7 @@ body{
   left: 50%;
   top: 50%;
 
-  width: 50%;
+  width: calc(var(--ringSize) - 36px);
   aspect-ratio: 1 / 1;
 
   border-radius: 50%;
@@ -207,6 +208,28 @@ body{
   filter: drop-shadow(0 14px 22px rgba(0,0,0,.18));
 
   animation: platterWobble 2.6s ease-in-out infinite;
+  
+   will-change: transform, translate;
+}
+
+.hero-media .record-spin::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+
+  /* subtle groove lines */
+  background:
+    repeating-radial-gradient(
+      circle at 50% 50%,
+      rgba(255,255,255,.06) 0px,
+      rgba(255,255,255,0) 2px,
+      rgba(0,0,0,0) 6px
+    );
+
+  opacity: .16;
+  mix-blend-mode: overlay;
+  pointer-events:none;
 }
 
 .hero-media .record-spin::after{
@@ -257,9 +280,9 @@ body{
 
 @keyframes platterWobble{
   0%,100% { translate: 0 0; }
-  25%     { translate: 0.7px -0.4px; }
-  50%     { translate: -0.6px 0.6px; }
-  75%     { translate: 0.5px -0.3px; }
+  25%     { translate: 1px -0.6px; }
+  50%     { translate: -0.8px 0.8px; }
+  75%     { translate: 0.7px -0.5px; }
 }
 
 @keyframes slowPan{
