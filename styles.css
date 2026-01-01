@@ -43,6 +43,33 @@ body{
   padding: 4rem;
   min-height: 420px;
 }
+/* =========================
+   HERO CONTENT POLISH
+========================= */
+.hero-content{
+  position: relative;
+  z-index: 8;
+  max-width: 44ch;
+}
+
+.hero-content h1{
+  font-size: clamp(1.8rem, 2.2vw + 1rem, 2.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hero-content p{
+  margin-top: 0.75rem;
+  line-height: 1.55;
+  color: rgba(17,17,17,.78);
+  font-size: 1rem;
+}
+
+.hero-content p:first-of-type{
+  margin-top: 0.6rem;
+  font-weight: 600;
+  color: rgba(17,17,17,.72);
+}
 
 /* =========================
    SHAPES
@@ -178,7 +205,7 @@ body{
   border-radius: 50%;
   clip-path: circle(50% at 50% 50%);
 
-  animation: platterSpin 1.05s linear infinite;
+  animation: platterSpin 1.8s linear infinite;
 }
 
 /* player always on top */
@@ -206,8 +233,8 @@ body{
 }
 
 @keyframes slowPan{
-  from{ transform: scale(1.06); }
-  to{ transform: scale(1.12) translate(-18px,12px); }
+  from{ transform: scale(1.03); }
+  to{ transform: scale(1.7) translate(-10px,7px); }
 }
 
 @keyframes washPulse{
@@ -239,3 +266,31 @@ body{
   0%,100%{ opacity: .55; }
   50%{ opacity: .85; }
 }
+@media (max-width: 900px){
+  body{ padding: 0 4vw; }
+
+  .hero-card{
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 2rem;
+    min-height: auto;
+  }
+
+  .hero-media{
+    margin-top: 0;
+    max-width: 100%;
+  }
+
+  .hero-content{
+    max-width: 60ch;
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
