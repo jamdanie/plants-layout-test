@@ -1,2 +1,2 @@
-# plants-layout-test
+# UW-layout-test
 HTML/CSS/JS layout test to Wix
