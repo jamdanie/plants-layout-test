@@ -417,3 +417,18 @@ body{
     height: 52%;
   }
 }
+/* ===== FINAL: FORCE PERFECT CIRCLE (do NOT change position) ===== */
+.hero-media .record-spin{
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  aspect-ratio: 1 / 1 !important;   /* keeps it from becoming oval */
+}
+
+.hero-media .record-spin img{
+  border-radius: 50% !important;
+  clip-path: circle(50% at 50% 50%) !important;  /* hard circle crop */
+  object-fit: cover !important;
+
+  /* prevents the “squircle” look while spinning */
+  transform-origin: 50% 50% !important;
+}
