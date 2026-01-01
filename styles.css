@@ -66,23 +66,18 @@ body{
   z-index: 1;
 }
 
-/* big neon wash (left) */
 .shape--blob{
   left: -80px;
   top: -40px;
   width: 900px;
   height: 520px;
   border-radius: 56px;
-
   background:
-    radial-gradient(circle at 25% 35%, rgba(255, 0, 170, .62), transparent 60%),
-    radial-gradient(circle at 55% 55%, rgba(130, 0, 255, .46), transparent 62%),
-    radial-gradient(circle at 75% 40%, rgba(0, 220, 255, .32), transparent 60%),
-    linear-gradient(135deg, rgba(255,0,170,.18), rgba(130,0,255,.14), rgba(0,220,255,.10));
-
+    radial-gradient(circle at 25% 35%, rgba(255,0,170,.62), transparent 60%),
+    radial-gradient(circle at 55% 55%, rgba(130,0,255,.46), transparent 62%),
+    radial-gradient(circle at 75% 40%, rgba(0,220,255,.32), transparent 60%);
   filter: blur(24px);
-  opacity: .95;
-  animation: washPulse 6.8s ease-in-out infinite;
+  animation: washPulse 7s ease-in-out infinite;
 }
 
 .shape--circle{
@@ -91,8 +86,7 @@ body{
   left: -210px;
   top: -70px;
   border-radius: 50%;
-  background: rgba(255, 0, 170, 0.22);
-  filter: blur(1px);
+  background: rgba(255,0,170,.22);
   animation: floaty 10s ease-in-out infinite;
 }
 
@@ -102,10 +96,8 @@ body{
   left: 120px;
   top: 30px;
   border-radius: 50%;
-  border: 18px solid rgba(255, 0, 170, 0.18);
-  background: transparent;
+  border: 18px solid rgba(255,0,170,.18);
   animation: spin 18s linear infinite;
-  opacity: .9;
 }
 
 .shape--dot{
@@ -114,444 +106,181 @@ body{
   left: -45px;
   top: 95px;
   border-radius: 50%;
-  background: rgba(0, 220, 255, 0.14);
-  filter: blur(1px);
+  background: rgba(0,220,255,.14);
   animation: floaty2 7.5s ease-in-out infinite;
 }
 
-.shape--spark{
-  width: 520px;
-  height: 300px;
-  left: 10px;
-  top: -20px;
-  border-radius: 999px;
-
-  background: radial-gradient(
-    circle at 30% 40%,
-    rgba(255, 0, 170, .62),
-    rgba(255, 0, 170, .18) 55%,
-    rgba(130, 0, 255, .12) 68%,
-    transparent 78%
-  );
-
-  filter: blur(18px);
-  opacity: .95;
-  animation: sparkPulse 5.6s ease-in-out infinite;
-}
-
-/* right orbit ring */
 .shape--orbit{
-  position: absolute;
-  z-index: 1;
   width: 320px;
   height: 320px;
   right: 90px;
   top: -70px;
   border-radius: 50%;
-
-  border: 16px solid rgba(0, 220, 255, .18);
-  box-shadow:
-    0 0 0 8px rgba(130, 0, 255, .10) inset,
-    0 0 35px rgba(0, 220, 255, .14);
-
-  opacity: .9;
-  animation: orbitDrift 7.2s ease-in-out infinite, ringFade 4.8s ease-in-out infinite;
-}
-
-.shape--orbit::before{
-  content: "";
-  position: absolute;
-  inset: 68px;
-  border-radius: 50%;
-
-  background: radial-gradient(circle at 35% 35%,
-    rgba(255, 0, 170, .85),
-    rgba(130, 0, 255, .55) 55%,
-    rgba(0, 220, 255, .25) 85%);
-
-  filter: blur(1px);
-  opacity: .9;
-  animation: innerPulse 3.6s ease-in-out infinite;
+  border: 16px solid rgba(0,220,255,.18);
+  animation: orbitDrift 7s ease-in-out infinite;
 }
 
 /* =========================
-   PLAYER (fixed sizing + safe masked layers)
+   PLAYER
 ========================= */
 .hero-media{
   position: relative;
-  margin-top: 64px;           /* move player down */
+  margin-top: 64px;
   z-index: 7;
 
-  /* sizing lock */
   width: 100%;
   max-width: 560px;
   aspect-ratio: 4 / 3;
 
-  border-radius: 26px;
-  background: transparent;
-  overflow: visible;          /* allow glow + plates */
   isolation: isolate;
 }
 
-/* PLATE 1 (hot pink) */
-.hero-media::before{
-  content: "";
-  position: absolute;
-  inset: -12%;
-  z-index: 1;
-  pointer-events: none;
-
-  background-color: rgb(255, 0, 170);
-  opacity: .35; /* lower so it can’t wash everything */
-
-  /* safer mask properties (more compatible than shorthand) */
-  -webkit-mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  -webkit-mask-size: contain;
-
-  mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
-  mask-repeat: no-repeat;
-  mask-position: center;
-  mask-size: contain;
-
-  transform: translate(-18px, 12px) scale(1.10);
-
-  filter:
-    blur(1px)
-    drop-shadow(0 0 22px rgba(255, 0, 170, .85));
-
-  animation: platePulsePink 6.2s ease-in-out infinite;
-}
-
-/* PLATE 2 (purple) */
+/* neon plates */
+.hero-media::before,
 .hero-media::after{
-  content: "";
-  position: absolute;
-  inset: -12%;
-  z-index: 1;
-  pointer-events: none;
-
-  background-color: rgb(130, 0, 255);
-  opacity: .22;
-
-  -webkit-mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  -webkit-mask-size: contain;
-
-  mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
-  mask-repeat: no-repeat;
-  mask-position: center;
-  mask-size: contain;
-
-  transform: translate(16px, -10px) scale(1.08);
-
-  filter:
-    blur(1.6px)
-    drop-shadow(0 0 18px rgba(130, 0, 255, .75))
-    drop-shadow(0 0 14px rgba(0, 220, 255, .35));
-
-  animation: platePulsePurple 7.1s ease-in-out infinite;
+  content:"";
+  position:absolute;
+  inset:-12%;
+  pointer-events:none;
+  mask: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807")
+        center / contain no-repeat;
 }
 
-/* Real player image always on top */
+.hero-media::before{
+  background: rgb(255,0,170);
+  opacity:.35;
+  transform: translate(-18px,12px) scale(1.1);
+  animation: platePulsePink 6s ease-in-out infinite,
+             platesPlayingPulse 2.2s ease-in-out infinite;
+}
+
+.hero-media::after{
+  background: rgb(130,0,255);
+  opacity:.22;
+  transform: translate(16px,-10px) scale(1.08);
+  animation: platePulsePurple 7s ease-in-out infinite,
+             platesPlayingPulse 2.2s ease-in-out infinite;
+}
+
+/* real player image */
 .hero-media img{
-  position: relative;
-  z-index: 3;
-
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
-
-  filter: drop-shadow(0px 12px 22px rgba(0,0,0,.14));
-  animation: slowPan 7s ease-in-out infinite alternate;
+  position:relative;
+  z-index:3;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  animation: slowPan 7s ease-in-out infinite alternate,
+             playerPlayingPulse 2.2s ease-in-out infinite;
 }
 
 /* =========================
-   SPINNING RECORD (ALWAYS ABOVE PLATES)
+   SPINNING RECORD (ON PLAYER)
 ========================= */
-.record-spin{
-  position: absolute;
-  z-index: 20; /* brute force above plates + player */
-  width: 220px;
-  height: 220px;
-  left: 90px;
-  top: 10px;
-  pointer-events: none;
-  isolation: isolate;
+.hero-media .record-spin{
+  position:absolute;
+  z-index:25;
+  width:44%;
+  aspect-ratio:1/1;
+  left:22%;
+  top:21%;
+  pointer-events:none;
 }
 
-/* deep neon circle BEHIND the record */
-.record-spin::before{
-  content: "";
-  position: absolute;
-  inset: -22%;
-  border-radius: 50%;
-  z-index: 0;
-
+.hero-media .record-spin::before{
+  content:"";
+  position:absolute;
+  inset:-18%;
+  border-radius:50%;
   background:
     radial-gradient(circle at 30% 30%,
-      rgba(255, 0, 170, 1),
-      rgba(180, 0, 255, 0.85) 55%,
-      rgba(0, 220, 255, 0.55) 78%,
-      transparent 100%
-    );
-
-  filter: blur(10px) saturate(1.8);
-  opacity: .95;
-  animation: recordGlow 4.6s ease-in-out infinite;
+      rgba(255,0,170,1),
+      rgba(180,0,255,.85) 55%,
+      rgba(0,220,255,.55) 78%,
+      transparent);
+  filter: blur(10px);
+  opacity:.55;
 }
 
-/* record image — HARD CIRCLE CROP */
-.record-spin img{
-  position: relative;
-  z-index: 1;
-
-  width: 112%;
-  height: 112%;
-  margin: -6%;
-  display: block;
-  object-fit: cover;
-
-  border-radius: 50%;
-  clip-path: circle(50% at 50% 50%);
-
-  transform-origin: 50% 50%;
-  animation: recordSpin 1.85s linear infinite;
+.hero-media .record-spin img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+  clip-path:circle(50%);
+  animation:
+    recordSpinFast 1.05s linear infinite,
+    recordWobble 2.8s ease-in-out infinite;
 }
 
 /* =========================
    TEXT
 ========================= */
 .hero-content h1{
-  margin: 0 0 1rem;
-  font-size: 1.1rem;
-  letter-spacing: .45em;
-  text-transform: uppercase;
+  font-size:1.1rem;
+  letter-spacing:.45em;
 }
 
 .hero-content p{
-  margin: 0;
-  max-width: 42ch;
-  line-height: 1.7;
-  opacity: .85;
+  max-width:42ch;
+  opacity:.85;
 }
 
 /* =========================
    ANIMATIONS
 ========================= */
-@keyframes slowPan{
-  from { transform: scale(1.06) translate(0px, 0px); }
-  to   { transform: scale(1.12) translate(-18px, 12px); }
+@keyframes recordSpinFast{
+  to{ transform:rotate(360deg); }
 }
-
-@keyframes recordSpin{
-  to { transform: rotate(360deg); }
+@keyframes recordWobble{
+  0%,100%{ transform:rotate(0); }
+  50%{ transform:rotate(.4deg); }
 }
-
-@keyframes recordGlow{
-  0%,100%{ transform: scale(1); opacity: .9; }
-  50%{ transform: scale(1.06); opacity: 1; }
+@keyframes playerPlayingPulse{
+  0%,100%{ transform:scale(1); }
+  50%{ transform:scale(1.012); }
 }
-
-@keyframes spin{
-  from{ transform: rotate(0deg); }
-  to{ transform: rotate(360deg); }
+@keyframes platesPlayingPulse{
+  0%,100%{ filter:blur(1px); }
+  50%{ filter:blur(1.4px); }
 }
-
-@keyframes floaty{
-  0%,100%{ transform: translate(0,0); }
-  50%{ transform: translate(18px, -14px); }
-}
-
-@keyframes floaty2{
-  0%,100%{ transform: translate(0,0) scale(1); }
-  50%{ transform: translate(12px, 10px) scale(1.06); }
-}
-
-@keyframes washPulse{
-  0%,100%{ opacity: .92; transform: scale(1); }
-  50%{ opacity: 1; transform: scale(1.02); }
-}
-
-@keyframes sparkPulse{
-  0%,100%{ opacity: .85; transform: scale(1); }
-  50%{ opacity: 1; transform: scale(1.04); }
-}
-
-@keyframes orbitDrift{
-  0%,100%{ transform: translateX(0); }
-  50%{ transform: translateX(-80px); }
-}
-
-@keyframes ringFade{
-  0%,100%{ opacity: .72; }
-  50%{ opacity: 1; }
-}
-
-@keyframes innerPulse{
-  0%,100%{ transform: scale(1); opacity: .85; }
-  50%{ transform: scale(1.07); opacity: 1; }
-}
-
-/* plates pulsing */
 @keyframes platePulsePink{
-  0%,100% { transform: translate(-18px, 12px) scale(1.14); opacity: .88; }
-  50%     { transform: translate(-22px, 14px) scale(1.18); opacity: .98; }
+  0%,100%{ opacity:.85; }
+  50%{ opacity:1; }
 }
-
 @keyframes platePulsePurple{
-  0%,100% { transform: translate(16px, -10px) scale(1.12); opacity: .48; }
-  50%     { transform: translate(20px, -12px) scale(1.16); opacity: .62; }
+  0%,100%{ opacity:.45; }
+  50%{ opacity:.65; }
+}
+@keyframes slowPan{
+  from{ transform:scale(1.06); }
+  to{ transform:scale(1.12); }
+}
+@keyframes washPulse{
+  0%,100%{ opacity:.85; }
+  50%{ opacity:1; }
+}
+@keyframes spin{
+  to{ transform:rotate(360deg); }
+}
+@keyframes floaty{
+  50%{ transform:translate(18px,-14px); }
+}
+@keyframes floaty2{
+  50%{ transform:translate(12px,10px); }
+}
+@keyframes orbitDrift{
+  50%{ transform:translateX(-80px); }
 }
 
 /* =========================
    MOBILE
 ========================= */
-@media (max-width: 768px){
-  .hero-card{
-    grid-template-columns: 1fr;
-    padding: 2.5rem;
-    gap: 2rem;
-  }
-
-  .hero-content h1{
-    letter-spacing: .2em;
-  }
-
-  .record-spin{
-    left: 55px;
-    top: 30px;
-    width: 175px;
-    height: 175px;
-  }
-
-  .shape--orbit{
-    right: 20px;
-    top: -60px;
-    width: 260px;
-    height: 260px;
-  }
-
-  .shape--orbit::before{
-    inset: 58px;
-  }
-}
-/* =========================================================
-   PATCH: "playing" effect
-   - record anchored to platter (inside .hero-media)
-   - record spins + subtle wobble
-   - player gently pulses while record spins
-   Paste this at the END of your CSS
-========================================================= */
-
-/* ensure hero-media is the positioning context */
-.hero-media{
-  position: relative;
-}
-
-/* --- anchor record to the player (NOT the hero-card) --- */
-.hero-media .record-spin{
-  position: absolute;
-  z-index: 25;           /* above plates + above player image */
-  pointer-events: none;
-  isolation: isolate;
-
-  /* size relative to player so it scales nicely */
-  width: 44%;
-  aspect-ratio: 1 / 1;
-
-  /* platter position — tweak these 2 values to move it */
-  left: 22%;
-  top: 21%;
-}
-
-/* glow behind record */
-.hero-media .record-spin::before{
-  content: "";
-  position: absolute;
-  inset: -18%;
-  border-radius: 50%;
-  z-index: 0;
-
-  background:
-    radial-gradient(circle at 30% 30%,
-      rgba(255, 0, 170, 1),
-      rgba(180, 0, 255, 0.85) 55%,
-      rgba(0, 220, 255, 0.55) 78%,
-      transparent 100%
-    );
-
-  filter: blur(10px) saturate(1.7);
-  opacity: .55;
-  animation: recordGlow 4.6s ease-in-out infinite;
-}
-
-/* record itself */
-.hero-media .record-spin img{
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-
-  border-radius: 50%;
-  clip-path: circle(50% at 50% 50%);
-
-  transform-origin: 50% 50%;
-  animation:
-    recordSpinFast 1.05s linear infinite,
-    recordWobble 2.8s ease-in-out infinite;
-}
-
-/* --- player "playing" pulse --- */
-/* pulse the actual player image a tiny bit */
-.hero-media > img{
-  animation:
-    slowPan 7s ease-in-out infinite alternate,
-    playerPlayingPulse 2.2s ease-in-out infinite;
-}
-
-/* pulse the plates too (subtle) */
-.hero-media::before{
-  animation:
-    platePulsePink 6.2s ease-in-out infinite,
-    platesPlayingPulse 2.2s ease-in-out infinite;
-}
-.hero-media::after{
-  animation:
-    platePulsePurple 7.1s ease-in-out infinite,
-    platesPlayingPulse 2.2s ease-in-out infinite;
-}
-
-/* keyframes */
-@keyframes recordSpinFast{
-  to { transform: rotate(360deg); }
-}
-
-@keyframes recordWobble{
-  0%,100% { transform: rotate(0deg) translate(0,0); }
-  50%     { transform: rotate(0.4deg) translate(0.6px, -0.6px); }
-}
-
-@keyframes playerPlayingPulse{
-  0%,100% { transform: scale(1) translateZ(0); }
-  50%     { transform: scale(1.012) translateZ(0); }
-}
-
-@keyframes platesPlayingPulse{
-  0%,100% { filter: blur(1px); }
-  50%     { filter: blur(1.4px); }
-}
-
-/* mobile: keep platter placement looking right */
-@media (max-width: 768px){
+@media (max-width:768px){
+  .hero-card{ grid-template-columns:1fr; }
   .hero-media .record-spin{
-    width: 48%;
-    left: 20%;
-    top: 18%;
+    width:48%;
+    left:20%;
+    top:18%;
   }
 }
+
