@@ -363,14 +363,14 @@ body{
   left: 21.2%;
   top: 24.0%;
 
-  /* ✅ force a square */
+  /* ✅ TRUE circle: width drives height */
   width: 46%;
-  height: 46%;
+  aspect-ratio: 1 / 1;
+  height: auto;
 
   border-radius: 50%;
   overflow: hidden;
 
-  /* wobble only on the container */
   transform-origin: 50% 50%;
   animation: platterWobble 2.6s ease-in-out infinite;
   will-change: transform;
