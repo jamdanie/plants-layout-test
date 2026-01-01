@@ -179,11 +179,15 @@ body{
 .hero-media .record-spin{
   position: absolute;
   z-index: 25;
-  width: 36%;          /* WAS 44% — smaller */
+  width: 34%;          /* slightly smaller for better fit */
   aspect-ratio: 1 / 1;
-  left: 24%;           /* tweak left/right */
-  top: 30%;            /* tweak up/down */
+
+  left: 24%;
+  top: 27%;            /* was ~30% → moved UP */
+
   pointer-events: none;
+  isolation: isolate;
+  will-change: transform;
 }
 
 .hero-media .record-spin::before{
@@ -280,6 +284,62 @@ body{
     width:48%;
     left:20%;
     top:18%;
+  }
+}
+/* =========================
+   PERFORMANCE PATCH (paste at end)
+========================= */
+
+/* keep the animation/repaint area contained */
+.hero-card{
+  contain: layout paint;
+}
+
+/* only hint GPU where we animate transforms */
+.shape--blob,
+.shape--circle,
+.shape--ring,
+.shape--dot,
+.shape--orbit,
+.hero-media::before,
+.hero-media::after,
+.hero-media > img,
+.hero-media .record-spin,
+.hero-media .record-spin img{
+  will-change: transform;
+}
+
+/* stop animating filter blur changes (expensive)
+   We keep the glow look but do NOT animate filter itself */
+.hero-media::before,
+.hero-media::after{
+  filter: blur(1px);
+}
+
+/* record glow: keep stable filter; only animate opacity via existing keyframes */
+.hero-media .record-spin::before{
+  filter: blur(9px) saturate(1.2);
+}
+
+/* Make the record spin “real” smooth (GPU-friendly) */
+.hero-media .record-spin img{
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  animation: recordSpinFast 1.05s linear infinite;
+}
+
+/* Pulse: only transform (no filter animation) */
+.hero-media > img{
+  animation:
+    slowPan 7s ease-in-out infinite alternate,
+    playerPlayingPulse 2.2s ease-in-out infinite;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{
+    animation: none !important;
+    transition: none !important;
   }
 }
 
