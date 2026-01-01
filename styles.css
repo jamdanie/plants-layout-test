@@ -417,18 +417,29 @@ body{
     height: 52%;
   }
 }
-/* ===== FINAL: FORCE PERFECT CIRCLE (do NOT change position) ===== */
+/* ===== FINAL: PERFECT CIRCLE (no position changes) ===== */
+
+/* Force the platter box to be a true square based on width */
 .hero-media .record-spin{
+  /* DO NOT TOUCH left/top here (your position is perfect) */
+
+  height: auto !important;          /* <-- key fix: stop % height distortion */
+  aspect-ratio: 1 / 1 !important;   /* square = real circle */
   border-radius: 50% !important;
   overflow: hidden !important;
-  aspect-ratio: 1 / 1 !important;   /* keeps it from becoming oval */
 }
 
+/* Make the image fill the square cleanly and clip HARD */
 .hero-media .record-spin img{
-  border-radius: 50% !important;
-  clip-path: circle(50% at 50% 50%) !important;  /* hard circle crop */
-  object-fit: cover !important;
+  position: absolute !important;
+  inset: -8% !important;            /* keeps white edge hidden */
 
-  /* prevents the “squircle” look while spinning */
-  transform-origin: 50% 50% !important;
+  width: auto !important;           /* avoid fighting inset */
+  height: auto !important;
+
+  border-radius: 50% !important;
+  -webkit-clip-path: circle(50% at 50% 50%) !important;
+  clip-path: circle(50% at 50% 50%) !important;
+
+  object-fit: cover !important;
 }
