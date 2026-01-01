@@ -183,11 +183,10 @@ body{
   aspect-ratio: 1 / 1;
 
   left: 24%;
-  top: 25%;            /* was ~27% → moved UP */
+  top: 24%;            /* was ~25% → moved UP */
 
   pointer-events: none;
   isolation: isolate;
-  will-change: transform;
 }
 
 .hero-media .record-spin::before{
