@@ -3,7 +3,7 @@
 ========================= */
 *,
 *::before,
-*::after {
+*::after{
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -61,7 +61,7 @@ body{
 }
 
 /* =========================
-   SHAPES (lowest layer)
+   SHAPES
 ========================= */
 .shape{
   position: absolute;
@@ -75,12 +75,10 @@ body{
   width: 900px;
   height: 520px;
   border-radius: 56px;
-
   background:
     radial-gradient(circle at 25% 35%, rgba(255,0,170,.62), transparent 60%),
     radial-gradient(circle at 55% 55%, rgba(130,0,255,.46), transparent 62%),
     radial-gradient(circle at 75% 40%, rgba(0,220,255,.32), transparent 60%);
-
   filter: blur(24px);
   animation: washPulse 7s ease-in-out infinite;
   will-change: opacity, transform;
@@ -119,7 +117,9 @@ body{
   will-change: transform;
 }
 
-/* orbit ring on the right */
+/* =========================
+   ORBIT RING + RECORD (FIXED)
+========================= */
 .shape--orbit{
   position: absolute;
   z-index: 1;
@@ -129,22 +129,41 @@ body{
   top: -70px;
   border-radius: 50%;
   border: 16px solid rgba(0,220,255,.18);
+
   animation: orbitDrift 7s ease-in-out infinite;
   will-change: transform;
+
+  /* center children */
+  display: grid;
+  place-items: center;
+  overflow: visible;
 }
 
-/* the old rawpixel record lives inside the orbit ring */
-.shape--orbit .orbit-record{
+/* white disc holder to hide checker edges */
+.shape--orbit::after{
+  content: "";
   position: absolute;
-  inset: 18%;
-  width: auto;
-  height: auto;
+  width: 66%;
+  height: 66%;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.92);
+  z-index: 0;
+}
+
+/* orbit record: centered + cropped */
+.shape--orbit .orbit-record{
+  position: relative;
+  z-index: 1;
+
+  width: 58%;
+  height: 58%;
   display: block;
+
   border-radius: 50%;
   clip-path: circle(50% at 50% 50%);
   object-fit: cover;
-  opacity: .85;
 
+  opacity: .9;
   transform-origin: 50% 50%;
   animation: orbitRecordSpin 8s linear infinite;
   will-change: transform;
@@ -173,7 +192,6 @@ body{
   inset:-12%;
   pointer-events:none;
 
-  /* use mask so the plate follows the player silhouette */
   -webkit-mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
@@ -201,7 +219,7 @@ body{
   animation: platePulsePurple 7s ease-in-out infinite;
 }
 
-/* real player image */
+/* main turntable image */
 .hero-media > img{
   position: relative;
   z-index: 3;
@@ -220,24 +238,27 @@ body{
 }
 
 /* =========================
-   PLATTER (BLACK VINYL) using platter.png as a MASK
+   PLATTER (FIXED)
+   - PERFECT circle (no oval)
+   - spins black vinyl using platter.png as mask
 ========================= */
 .hero-media .record-spin{
   position: absolute;
-  z-index: 30;            /* above the player image */
+  z-index: 30;
   pointer-events: none;
   isolation: isolate;
 
-  width: 33%;
-  aspect-ratio: 1 / 1;
-
   left: 24%;
-  top: 22%;               /* alignment — tweak if needed */
+  top: 22%;
 
-  will-change: transform;
+  width: 33%;
+  height: 33%;            /* <-- force square (prevents oval) */
+
+  border-radius: 50%;
+  overflow: hidden;       /* hard circle crop */
 }
 
-/* keep the actual image hidden (used only as mask file reference) */
+/* hide the img (only here to keep your HTML unchanged) */
 .hero-media .record-spin img{
   opacity: 0;
   width: 1px;
@@ -245,23 +266,21 @@ body{
   position: absolute;
 }
 
-/* the spinning BLACK record */
+/* spinning black record, shape defined by platter.png mask */
 .hero-media .record-spin::after{
   content: "";
   position: absolute;
   inset: 0;
   border-radius: 50%;
 
-  /* pure black vinyl + subtle groove depth */
   background:
     radial-gradient(circle at center,
-      #111 0%,
-      #111 68%,
-      #0a0a0a 72%,
+      #0f0f0f 0%,
+      #0f0f0f 64%,
+      #070707 70%,
       #000 100%
     );
 
-  /* platter.png defines the exact shape */
   -webkit-mask-image: url("platter.png");
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
@@ -280,7 +299,7 @@ body{
   transform: translateZ(0);
 }
 
-/* optional: thin highlight ring to feel “real” */
+/* subtle highlight ring */
 .hero-media .record-spin::before{
   content: "";
   position: absolute;
@@ -361,13 +380,10 @@ body{
 }
 
 /* =========================
-   ACCESSIBILITY: reduced motion
+   ACCESSIBILITY
 ========================= */
 @media (prefers-reduced-motion: reduce){
-  *{
-    animation: none !important;
-    transition: none !important;
-  }
+  *{ animation: none !important; transition: none !important; }
 }
 
 /* =========================
@@ -387,122 +403,21 @@ body{
     height: 260px;
   }
 
-  .hero-media .record-spin{
-    width: 40%;
-    left: 22%;
-    top: 20%;
+  .shape--orbit::after{
+    width: 72%;
+    height: 72%;
   }
-}
-/* =========================================================
-   FIX PATCH v2 (paste at END of styles.css)
-   - platter becomes a perfect circle + spins
-   - orbit record centers + checker edge hidden
-========================================================= */
 
-/* ------------------------------
-   A) PLATTER (perfect circle)
------------------------------- */
-.hero-media { position: relative; }
+  .shape--orbit .orbit-record{
+    width: 62%;
+    height: 62%;
+  }
 
-/* Force a true square box (prevents oval distortion) */
-.hero-media .record-spin{
-  position: absolute;
-  left: 24%;
-  top: 22%;
-  width: 33%;
-  height: 33%;              /* <-- force square */
-  z-index: 6;
-  pointer-events: none;
-
-  border-radius: 50%;
-  overflow: hidden;         /* hard crop */
-  background: #000;         /* makes any stray transparency look black */
-
-  animation: platterSpin 1.15s linear infinite !important;
-  transform-origin: 50% 50%;
-  will-change: transform;
-}
-
-/* The platter image fills the square and stays circular */
-.hero-media .record-spin img{
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-  object-fit: cover;        /* fills the circle */
-  border-radius: 50%;
-  clip-path: circle(50% at 50% 50%);
-}
-
-/* Guaranteed spin keyframes */
-@keyframes platterSpin{
-  to { transform: rotate(360deg); }
-}
-
-
-/* ------------------------------
-   B) ORBIT RECORD (center + hide checker)
------------------------------- */
-
-/* keep orbit ring as the positioning context */
-.shape--orbit{
-  position: absolute;
-  display: grid;
-  place-items: center;      /* centers content */
-  overflow: visible;
-}
-
-/* Create a white disc "holder" to hide edge artifacts */
-.shape--orbit::after{
-  content: "";
-  position: absolute;
-  width: 64%;
-  height: 64%;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.92);
-  z-index: 0;
-}
-
-/* Orbit record sits on top, perfectly centered */
-.shape--orbit .orbit-record{
-  position: relative;
-  z-index: 1;
-
-  width: 56% !important;
-  height: 56% !important;
-  display: block;
-
-  object-fit: cover;
-  border-radius: 50%;
-  clip-path: circle(50% at 50% 50%);
-
-  /* gentle spin */
-  animation: orbitRecordSpin 8s linear infinite !important;
-  transform-origin: 50% 50%;
-  will-change: transform;
-}
-
-@keyframes orbitRecordSpin{
-  to { transform: rotate(360deg); }
-}
-
-
-/* ------------------------------
-   C) Mobile tweak
------------------------------- */
-@media (max-width: 768px){
   .hero-media .record-spin{
-    left: 22%;
-    top: 20%;
     width: 40%;
     height: 40%;
-  }
-
-  .shape--orbit::after{
-    width: 70%;
-    height: 70%;
-  }
-  .shape--orbit .orbit-record{
-    width: 60% !important;
-    height: 60% !important;
+    left: 22%;
+    top: 20%;
   }
 }
+
