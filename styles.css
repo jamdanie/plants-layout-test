@@ -394,49 +394,115 @@ body{
   }
 }
 /* =========================================================
-   FIX PATCH (paste at END of styles.css)
-   - platter ALWAYS spins
-   - orbit record stays inside the orbit ring + no checker edge
+   FIX PATCH v2 (paste at END of styles.css)
+   - platter becomes a perfect circle + spins
+   - orbit record centers + checker edge hidden
 ========================================================= */
 
-/* --- A) PLATTER: spin the container (most reliable) --- */
+/* ------------------------------
+   A) PLATTER (perfect circle)
+------------------------------ */
+.hero-media { position: relative; }
+
+/* Force a true square box (prevents oval distortion) */
 .hero-media .record-spin{
+  position: absolute;
+  left: 24%;
+  top: 22%;
+  width: 33%;
+  height: 33%;              /* <-- force square */
+  z-index: 6;
+  pointer-events: none;
+
+  border-radius: 50%;
+  overflow: hidden;         /* hard crop */
+  background: #000;         /* makes any stray transparency look black */
+
   animation: platterSpin 1.15s linear infinite !important;
   transform-origin: 50% 50%;
+  will-change: transform;
 }
 
-/* define the spin (in case it doesn't exist in your file) */
+/* The platter image fills the square and stays circular */
+.hero-media .record-spin img{
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  object-fit: cover;        /* fills the circle */
+  border-radius: 50%;
+  clip-path: circle(50% at 50% 50%);
+}
+
+/* Guaranteed spin keyframes */
 @keyframes platterSpin{
   to { transform: rotate(360deg); }
 }
 
-/* IMPORTANT: stop any pseudo-element animation so we don’t “fight” it */
-.hero-media .record-spin::after{
-  animation: none !important;
-}
 
-/* --- B) ORBIT: lock image inside the ring --- */
+/* ------------------------------
+   B) ORBIT RECORD (center + hide checker)
+------------------------------ */
+
+/* keep orbit ring as the positioning context */
 .shape--orbit{
+  position: absolute;
   display: grid;
-  place-items: center;
-  overflow: hidden;          /* prevents huge spill-out */
+  place-items: center;      /* centers content */
+  overflow: visible;
 }
 
+/* Create a white disc "holder" to hide edge artifacts */
+.shape--orbit::after{
+  content: "";
+  position: absolute;
+  width: 64%;
+  height: 64%;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.92);
+  z-index: 0;
+}
+
+/* Orbit record sits on top, perfectly centered */
 .shape--orbit .orbit-record{
-  position: relative !important;
-  width: 62% !important;
-  height: 62% !important;
+  position: relative;
+  z-index: 1;
+
+  width: 56% !important;
+  height: 56% !important;
+  display: block;
 
   object-fit: cover;
   border-radius: 50%;
   clip-path: circle(50% at 50% 50%);
 
-  /* hides the PNG checker edge */
-  border: 10px solid rgba(255,255,255,0.95);
-
+  /* gentle spin */
   animation: orbitRecordSpin 8s linear infinite !important;
+  transform-origin: 50% 50%;
+  will-change: transform;
 }
 
 @keyframes orbitRecordSpin{
   to { transform: rotate(360deg); }
+}
+
+
+/* ------------------------------
+   C) Mobile tweak
+------------------------------ */
+@media (max-width: 768px){
+  .hero-media .record-spin{
+    left: 22%;
+    top: 20%;
+    width: 40%;
+    height: 40%;
+  }
+
+  .shape--orbit::after{
+    width: 70%;
+    height: 70%;
+  }
+  .shape--orbit .orbit-record{
+    width: 60% !important;
+    height: 60% !important;
+  }
 }
