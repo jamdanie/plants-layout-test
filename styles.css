@@ -141,7 +141,7 @@ body{
 
   z-index: 2;
 
-  animation: spin 18s linear infinite;
+  animation: ringPulse 4s ease-in-out infinite;
 }
 
 /* =========================
@@ -233,4 +233,9 @@ body{
 @keyframes platePulsePurple{
   0%,100%{ opacity:.45; }
   50%{ opacity:.65; }
+}
+
+@keyframes ringPulse{
+  0%,100%{ opacity: .55; }
+  50%{ opacity: .85; }
 }
