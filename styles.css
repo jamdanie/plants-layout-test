@@ -417,65 +417,45 @@ body{
   }
 }
 
-/* ===== FINAL PLATTER LOCK + SPIN (AUTHORITATIVE) ===== */
+/* ===== FINAL MICRO FIX: LEFT NUDGE + GUARANTEED SPIN ===== */
 
-/* 1) Container: size + position ONLY (never animate this) */
+/* Container: position + size only (NO animation here) */
 .hero-media .record-spin{
-  left: 23.6% !important;     /* move LEFT */
-  top: 23.8% !important;      /* move DOWN */
+  left: 22.9% !important;   /* move LEFT (was ~23.6%) */
+  top: 23.8% !important;
 
-  width: 44% !important;      /* slightly bigger */
-  height: 44% !important;     /* MUST match width (prevents oval) */
+  width: 44% !important;
+  height: 44% !important;
 
   border-radius: 50% !important;
   overflow: hidden !important;
 
-  animation: none !important; /* container never spins */
+  animation: none !important;
   transform: none !important;
 }
 
-/* 2) The actual spinning platter (this is what rotates) */
+/* The actual spinning platter */
 .hero-media .record-spin::after{
-  content: "";
-  position: absolute;
-  inset: -2% !important;      /* tiny overscan to fully fill edge */
+  inset: -2% !important;    /* edge fill */
   border-radius: 50%;
 
-  background:
-    radial-gradient(circle at center,
-      #0a0a0a 0%,
-      #0a0a0a 62%,
-      #050505 70%,
-      #000 100%
-    );
-
-  -webkit-mask-image: url("platter.png");
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  -webkit-mask-size: 100% 100%;
-
-  mask-image: url("platter.png");
-  mask-repeat: no-repeat;
-  mask-position: center;
-  mask-size: 100% 100%;
-
-  transform-origin: 50% 50%;
+  transform-origin: 50% 50% !important;
   animation: platterSpin 1.05s linear infinite !important;
 
-  will-change: transform;
   backface-visibility: hidden;
+  will-change: transform;
   transform: translateZ(0);
 }
 
-/* 3) Safety: kill any accidental img-based transforms */
+/* Safety: no img transforms allowed */
 .hero-media .record-spin img{
   display: none !important;
 }
 
-/* 4) Mobile correction */
+/* Mobile correction */
 @media (max-width: 768px){
   .hero-media .record-spin{
-    left: 22.8% !important;
+    left: 22.2% !important;
     top: 21.8% !important;
     width: 48% !important;
     height: 48% !important;
