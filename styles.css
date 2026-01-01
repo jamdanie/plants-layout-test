@@ -230,9 +230,8 @@ body{
   border-radius: 50%;
   overflow: hidden;
 
-  transform:
-    translate(-50%, -50%)
-    translate(-120px, -210px); /* ← CHANGED */
+  transform: translate(-50%, -50%) translate(-55px, -165px) !important;
+
 
   animation: platterWobble 2.6s ease-in-out infinite;
 }
