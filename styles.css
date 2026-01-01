@@ -401,12 +401,16 @@ body{
 
 /* --- A) PLATTER: spin the container (most reliable) --- */
 .hero-media .record-spin{
-  /* keep your size/position, just guarantee spin */
   animation: platterSpin 1.15s linear infinite !important;
   transform-origin: 50% 50%;
 }
 
-/* IMPORTANT: stop animating the pseudo so we don’t “double-spin” */
+/* define the spin (in case it doesn't exist in your file) */
+@keyframes platterSpin{
+  to { transform: rotate(360deg); }
+}
+
+/* IMPORTANT: stop any pseudo-element animation so we don’t “fight” it */
 .hero-media .record-spin::after{
   animation: none !important;
 }
@@ -415,11 +419,11 @@ body{
 .shape--orbit{
   display: grid;
   place-items: center;
-  overflow: hidden;          /* keeps anything from spilling out */
+  overflow: hidden;          /* prevents huge spill-out */
 }
 
 .shape--orbit .orbit-record{
-  position: relative !important; /* overrides absolute/inset if you had it */
+  position: relative !important;
   width: 62% !important;
   height: 62% !important;
 
@@ -427,9 +431,12 @@ body{
   border-radius: 50%;
   clip-path: circle(50% at 50% 50%);
 
-  /* hides the PNG's checker edge */
+  /* hides the PNG checker edge */
   border: 10px solid rgba(255,255,255,0.95);
 
-  /* keep the subtle spin */
   animation: orbitRecordSpin 8s linear infinite !important;
+}
+
+@keyframes orbitRecordSpin{
+  to { transform: rotate(360deg); }
 }
