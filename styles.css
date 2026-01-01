@@ -220,9 +220,8 @@ body{
   pointer-events: none;
   z-index: 2;
 
-  /* keep your position */
-  left: 50% !important;
-  top: 50% !important;
+  left: 50%;
+  top: 50%;
 
   width: 46%;
   aspect-ratio: 1 / 1;
@@ -230,10 +229,13 @@ body{
   border-radius: 50%;
   overflow: hidden;
 
-  transform: translate(-50%, -50%) translate(-55px, -165px) !important;
+  /* base position (gets overridden by FINAL OVERRIDE at the end) */
+  transform: translate(-50%, -50%) translate(-55px, -165px);
 
-
+  transform-origin: 50% 50%;
   animation: platterWobble 2.6s ease-in-out infinite;
+
+  will-change: transform;
 }
 
 .hero-media .record-spin img{
@@ -243,6 +245,7 @@ body{
   height: 120%;
 
   object-fit: cover;
+
   border-radius: 50%;
   clip-path: circle(50% at 50% 50%);
 
@@ -368,7 +371,7 @@ body{
   }
 
   .hero-media .record-spin{
-    animation: platterWobble 2.8s ease-in-out infinite !important;
+    animation: platterWobble 2.6s ease-in-out infinite !important;
   }
 
   .hero-media .record-spin img{
@@ -403,19 +406,23 @@ body{
     height: 80%;
   }
 
-  /* keep relative placement on mobile */
+  /* mobile placement (separate from desktop) */
   .hero-media .record-spin{
-    left: 19.8%;
-    top: 21.8%;
-    width: 52%;
+    left: 50% !important;
+    top: 50% !important;
+    width: 52% !important;
+
+    /* a lighter nudge for small screens */
+    transform: translate(-50%, -50%) translate(-35px, -120px) !important;
   }
 }
-/* ===== FINAL OVERRIDE (PASTE AT VERY END) ===== */
-/* Record sits ABOVE glow, BELOW player, and is centered into the big ring */
 
+/* =========================================================
+   FINAL OVERRIDE (ONLY POSITION CONTROL LIVES HERE)
+   Record sits ABOVE glow, BELOW player, and centered into big ring
+========================================================= */
 .hero-media{ position: relative; }
 
-/* spinning record layer (behind player, above glow) */
 .hero-media .record-spin{
   position: absolute !important;
   pointer-events: none !important;
@@ -430,8 +437,8 @@ body{
   border-radius: 50% !important;
   overflow: hidden !important;
 
-  /* ✅ this is the ONLY position control */
-  transform: translate(-50%, -50%) translate(-120px, -210px) !important;
+  /* ✅ UPDATED: was (-120px, -210px). This is right + down. */
+  transform: translate(-50%, -50%) translate(-55px, -165px) !important;
 
   transform-origin: 50% 50% !important;
   animation: platterWobble 2.6s ease-in-out infinite !important;
