@@ -117,7 +117,7 @@ body{
 }
 
 /* =========================
-   ORBIT RING + RECORD (CLEAN + CENTERED)
+   ORBIT RING + RECORD
 ========================= */
 .shape--orbit{
   position: absolute;
@@ -132,29 +132,27 @@ body{
   animation: orbitDrift 7s ease-in-out infinite;
   will-change: transform;
 
-  /* center everything */
   display: grid;
   place-items: center;
 }
 
-/* white disc holder hides checker edges */
+/* bigger holder so checker edge is hidden */
 .shape--orbit::after{
   content: "";
   position: absolute;
-  width: 72%;
-  height: 72%;
+  width: 78%;
+  height: 78%;
   border-radius: 50%;
   background: rgba(255,255,255,.92);
   z-index: 0;
 }
 
-/* orbit record always centered */
 .shape--orbit .orbit-record{
   position: relative;
   z-index: 1;
 
-  width: 68%;
-  height: 68%;
+  width: 74%;
+  height: 74%;
   display: block;
 
   border-radius: 50%;
@@ -234,8 +232,8 @@ body{
 }
 
 /* =========================
-   PLATTER (SPINS + FILLS + CENTERED)
-   - spins BLACK vinyl using platter.png as mask
+   PLATTER (BIGGER + LEFT + GUARANTEED SPIN)
+   IMPORTANT: only the ::after spins (no conflicting transforms)
 ========================= */
 .hero-media .record-spin{
   position: absolute;
@@ -243,30 +241,30 @@ body{
   pointer-events: none;
   isolation: isolate;
 
-  /* tuned: bigger + more centered */
-  left: 23.4%;
-  top: 23.0%;
+  /* tuned: bigger + more left + a touch down */
+  left: 20.2%;
+  top: 24.0%;
 
-  width: 36%;
-  height: 36%;
+  width: 44%;
+  height: 44%;
 
   border-radius: 50%;
   overflow: hidden;
+
+  /* do NOT animate container */
+  transform: none;
 }
 
-/* keep HTML unchanged */
+/* hide the img (we keep it only so your HTML stays the same) */
 .hero-media .record-spin img{
-  opacity: 0;
-  width: 1px;
-  height: 1px;
-  position: absolute;
+  display: none;
 }
 
-/* spinning black vinyl */
+/* the spinning black vinyl */
 .hero-media .record-spin::after{
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -2%;              /* tiny overscan so it fills edge */
   border-radius: 50%;
 
   background:
@@ -288,10 +286,10 @@ body{
   mask-size: 100% 100%;
 
   transform-origin: 50% 50%;
-  animation: platterSpin 1.15s linear infinite;
-  will-change: transform;
+  animation: platterSpin 1.05s linear infinite;
 
   backface-visibility: hidden;
+  will-change: transform;
   transform: translateZ(0);
 }
 
@@ -299,7 +297,7 @@ body{
 .hero-media .record-spin::before{
   content: "";
   position: absolute;
-  inset: 6%;
+  inset: 7%;
   border-radius: 50%;
   border: 1px solid rgba(255,255,255,.08);
   pointer-events: none;
@@ -377,9 +375,26 @@ body{
 
 /* =========================
    ACCESSIBILITY
+   Stop the heavy motion, but KEEP platter + orbit spinning.
 ========================= */
 @media (prefers-reduced-motion: reduce){
-  *{ animation: none !important; transition: none !important; }
+  .shape--blob,
+  .shape--circle,
+  .shape--ring,
+  .shape--dot,
+  .shape--orbit,
+  .hero-media::before,
+  .hero-media::after,
+  .hero-media > img{
+    animation: none !important;
+  }
+
+  .hero-media .record-spin::after{
+    animation: platterSpin 1.05s linear infinite !important;
+  }
+  .shape--orbit .orbit-record{
+    animation: orbitRecordSpin 8s linear infinite !important;
+  }
 }
 
 /* =========================
@@ -400,43 +415,20 @@ body{
   }
 
   .shape--orbit::after{
+    width: 80%;
+    height: 80%;
+  }
+
+  .shape--orbit .orbit-record{
     width: 76%;
     height: 76%;
   }
 
-  .shape--orbit .orbit-record{
-    width: 70%;
-    height: 70%;
-  }
-
   .hero-media .record-spin{
-    width: 42%;
-    height: 42%;
-    left: 21.8%;
-    top: 20.8%;
+    left: 19.8%;
+    top: 22.0%;
+    width: 50%;
+    height: 50%;
   }
 }
 
-/* ===== LAST FIX: platter LEFT + spin (even if reduced-motion is on) ===== */
-
-/* Nudge platter LEFT a bit */
-.hero-media .record-spin{
-  left: 20.9% !important;   /* was 21.8% -> move LEFT */
-  top: 23.6% !important;
-}
-
-/* Force the spin on the spinning layer */
-.hero-media .record-spin::after{
-  animation: platterSpin 1.05s linear infinite !important;
-}
-
-/* If Reduce Motion is ON, your earlier *{animation:none} cancels everything.
-   This re-enables ONLY the platter + orbit record. */
-@media (prefers-reduced-motion: reduce){
-  .hero-media .record-spin::after{
-    animation: platterSpin 1.05s linear infinite !important;
-  }
-  .shape--orbit .orbit-record{
-    animation: orbitRecordSpin 8s linear infinite !important;
-  }
-}
