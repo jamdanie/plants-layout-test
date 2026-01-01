@@ -55,6 +55,9 @@ body{
 
   padding: 4rem;
   min-height: 420px;
+
+  /* perf containment */
+  contain: layout paint;
 }
 
 /* =========================
@@ -72,12 +75,15 @@ body{
   width: 900px;
   height: 520px;
   border-radius: 56px;
+
   background:
     radial-gradient(circle at 25% 35%, rgba(255,0,170,.62), transparent 60%),
     radial-gradient(circle at 55% 55%, rgba(130,0,255,.46), transparent 62%),
     radial-gradient(circle at 75% 40%, rgba(0,220,255,.32), transparent 60%);
+
   filter: blur(24px);
   animation: washPulse 7s ease-in-out infinite;
+  will-change: opacity, transform;
 }
 
 .shape--circle{
@@ -88,6 +94,7 @@ body{
   border-radius: 50%;
   background: rgba(255,0,170,.22);
   animation: floaty 10s ease-in-out infinite;
+  will-change: transform;
 }
 
 .shape--ring{
@@ -98,6 +105,7 @@ body{
   border-radius: 50%;
   border: 18px solid rgba(255,0,170,.18);
   animation: spin 18s linear infinite;
+  will-change: transform;
 }
 
 .shape--dot{
@@ -108,9 +116,13 @@ body{
   border-radius: 50%;
   background: rgba(0,220,255,.14);
   animation: floaty2 7.5s ease-in-out infinite;
+  will-change: transform;
 }
 
+/* orbit ring on the right */
 .shape--orbit{
+  position: absolute;
+  z-index: 1;
   width: 320px;
   height: 320px;
   right: 90px;
@@ -118,6 +130,24 @@ body{
   border-radius: 50%;
   border: 16px solid rgba(0,220,255,.18);
   animation: orbitDrift 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* the old rawpixel record lives inside the orbit ring */
+.shape--orbit .orbit-record{
+  position: absolute;
+  inset: 18%;
+  width: auto;
+  height: auto;
+  display: block;
+  border-radius: 50%;
+  clip-path: circle(50% at 50% 50%);
+  object-fit: cover;
+  opacity: .85;
+
+  transform-origin: 50% 50%;
+  animation: orbitRecordSpin 8s linear infinite;
+  will-change: transform;
 }
 
 /* =========================
@@ -142,414 +172,142 @@ body{
   position:absolute;
   inset:-12%;
   pointer-events:none;
-  mask: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807")
-        center / contain no-repeat;
+
+  /* use mask so the plate follows the player silhouette */
+  -webkit-mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+
+  mask-image: url("https://skybygramophone.com/cdn/shop/files/Z99oU6kQ_f2b2643e-0b29-44c6-8a4c-7b56b15197df_large.png?v=1757520807");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+
+  will-change: transform, opacity;
 }
 
 .hero-media::before{
   background: rgb(255,0,170);
   opacity:.35;
   transform: translate(-18px,12px) scale(1.1);
-  animation: platePulsePink 6s ease-in-out infinite,
-             platesPlayingPulse 2.2s ease-in-out infinite;
+  animation: platePulsePink 6s ease-in-out infinite;
 }
 
 .hero-media::after{
   background: rgb(130,0,255);
   opacity:.22;
   transform: translate(16px,-10px) scale(1.08);
-  animation: platePulsePurple 7s ease-in-out infinite,
-             platesPlayingPulse 2.2s ease-in-out infinite;
+  animation: platePulsePurple 7s ease-in-out infinite;
 }
 
 /* real player image */
-.hero-media img{
-  position:relative;
-  z-index:3;
-  width:100%;
-  height:100%;
-  object-fit:contain;
+.hero-media > img{
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+
+  filter: drop-shadow(0px 12px 22px rgba(0,0,0,.14));
+
+  transform-origin: 70% 45%;
   animation: slowPan 7s ease-in-out infinite alternate,
-             playerPlayingPulse 2.2s ease-in-out infinite;
+             playerPulse 2.4s ease-in-out infinite;
+
+  will-change: transform;
 }
 
 /* =========================
-   SPINNING RECORD (ON PLAYER)
+   PLATTER (BLACK VINYL) using platter.png as a MASK
 ========================= */
 .hero-media .record-spin{
   position: absolute;
-  z-index: 25;
-  width: 34%;          /* slightly smaller for better fit */
+  z-index: 30;            /* above the player image */
+  pointer-events: none;
+  isolation: isolate;
+
+  width: 33%;
   aspect-ratio: 1 / 1;
 
   left: 24%;
-  top: 24%;            /* was ~25% → moved UP */
+  top: 22%;               /* alignment — tweak if needed */
 
-  pointer-events: none;
-  isolation: isolate;
+  will-change: transform;
 }
 
-.hero-media .record-spin::before{
-  content:"";
-  position:absolute;
-  inset:-18%;
-  border-radius:50%;
-  background:
-    radial-gradient(circle at 30% 30%,
-      rgba(255,0,170,1),
-      rgba(180,0,255,.85) 55%,
-      rgba(0,220,255,.55) 78%,
-      transparent);
-  filter: blur(10px);
-  opacity:.55;
-}
-
+/* keep the actual image hidden (used only as mask file reference) */
 .hero-media .record-spin img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  position: absolute;
+}
+
+/* the spinning BLACK record */
+.hero-media .record-spin::after{
+  content: "";
+  position: absolute;
+  inset: 0;
   border-radius: 50%;
-  clip-path: circle(50%);
+
+  /* pure black vinyl + subtle groove depth */
+  background:
+    radial-gradient(circle at center,
+      #111 0%,
+      #111 68%,
+      #0a0a0a 72%,
+      #000 100%
+    );
+
+  /* platter.png defines the exact shape */
+  -webkit-mask-image: url("platter.png");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+
+  mask-image: url("platter.png");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+
   transform-origin: 50% 50%;
-  animation: recordSpinFast 1.05s linear infinite;
+  animation: platterSpin 1.15s linear infinite;
+
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* optional: thin highlight ring to feel “real” */
+.hero-media .record-spin::before{
+  content: "";
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.08);
+  pointer-events: none;
 }
 
 /* =========================
    TEXT
 ========================= */
 .hero-content h1{
-  font-size:1.1rem;
-  letter-spacing:.45em;
+  font-size: 1.1rem;
+  letter-spacing: .45em;
+  text-transform: uppercase;
 }
 
 .hero-content p{
-  max-width:42ch;
-  opacity:.85;
+  max-width: 42ch;
+  line-height: 1.7;
+  opacity: .85;
 }
 
 /* =========================
    ANIMATIONS
 ========================= */
-@keyframes recordSpinFast{
-  to{ transform:rotate(360deg); }
-}
-@keyframes recordWobble{
-  0%,100%{ transform:rotate(0); }
-  50%{ transform:rotate(.4deg); }
-}
-@keyframes playerPlayingPulse{
-  0%,100%{ transform:scale(1); }
-  50%{ transform:scale(1.012); }
-}
-@keyframes platesPlayingPulse{
-  0%,100%{ filter:blur(1px); }
-  50%{ filter:blur(1.4px); }
-}
-@keyframes platePulsePink{
-  0%,100%{ opacity:.85; }
-  50%{ opacity:1; }
-}
-@keyframes platePulsePurple{
-  0%,100%{ opacity:.45; }
-  50%{ opacity:.65; }
-}
-@keyframes slowPan{
-  from{ transform:scale(1.06); }
-  to{ transform:scale(1.12); }
-}
-@keyframes washPulse{
-  0%,100%{ opacity:.85; }
-  50%{ opacity:1; }
-}
-@keyframes spin{
-  to{ transform:rotate(360deg); }
-}
-@keyframes floaty{
-  50%{ transform:translate(18px,-14px); }
-}
-@keyframes floaty2{
-  50%{ transform:translate(12px,10px); }
-}
-@keyframes orbitDrift{
-  50%{ transform:translateX(-80px); }
-}
-
-/* =========================
-   MOBILE
-========================= */
-@media (max-width:768px){
-  .hero-card{ grid-template-columns:1fr; }
-  .hero-media .record-spin{
-    width:48%;
-    left:20%;
-    top:18%;
-  }
-}
-/* =========================
-   PERFORMANCE PATCH (paste at end)
-========================= */
-
-/* keep the animation/repaint area contained */
-.hero-card{
-  contain: layout paint;
-}
-
-/* only hint GPU where we animate transforms */
-.shape--blob,
-.shape--circle,
-.shape--ring,
-.shape--dot,
-.shape--orbit,
-.hero-media::before,
-.hero-media::after,
-.hero-media > img,
-.hero-media .record-spin,
-.hero-media .record-spin img{
-  will-change: transform;
-}
-
-/* stop animating filter blur changes (expensive)
-   We keep the glow look but do NOT animate filter itself */
-.hero-media::before,
-.hero-media::after{
-  filter: blur(1px);
-}
-
-/* record glow: keep stable filter; only animate opacity via existing keyframes */
-.hero-media .record-spin::before{
-  filter: blur(9px) saturate(1.2);
-}
-
-/* Make the record spin “real” smooth (GPU-friendly) */
-.hero-media .record-spin img{
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  animation: recordSpinFast 1.05s linear infinite;
-}
-
-/* Pulse: only transform (no filter animation) */
-.hero-media > img{
-  animation:
-    slowPan 7s ease-in-out infinite alternate,
-    playerPlayingPulse 2.2s ease-in-out infinite;
-}
-
-/* Respect reduced motion */
-@media (prefers-reduced-motion: reduce){
-  *{
-    animation: none !important;
-    transition: none !important;
-  }
-}
-/* =========================================================
-   PATCH: platter alignment + guaranteed spin
-   - spins the cropped platter image (platter.png)
-   - moves it slightly UP for better alignment
-   - moves the old vinyl into the right orbit ring
-========================================================= */
-
-/* --- the orbit ring now holds a vinyl image --- */
-.shape--orbit{
-  display: grid;
-  place-items: center;
-}
-
-.shape--orbit .orbit-record{
-  width: 62%;
-  height: auto;
-  display: block;
-  border-radius: 50%;
-  clip-path: circle(50%);
-  opacity: .95;
-
-  /* subtle spin inside the drifting ring */
-  animation: orbitVinylSpin 6.5s linear infinite;
-  will-change: transform;
-}
-
-@keyframes orbitVinylSpin{
-  to { transform: rotate(360deg); }
-}
-
-/* --- platter record on the player --- */
-.hero-media{
-  position: relative; /* ensure record anchors to the player */
-}
-
-/* container wobble (so we don't fight the rotate animation on the img) */
-.hero-media .record-spin{
-  position: absolute;
-  z-index: 25;
-  pointer-events: none;
-  isolation: isolate;
-
-  /* SIZE: a bit smaller than before */
-  width: 32%;
-  aspect-ratio: 1 / 1;
-
-  /* POSITION: move UP a touch for alignment */
-  left: 24%;
-  top: 22%;
-
-  animation: recordWobble 2.8s ease-in-out infinite;
-  will-change: transform;
-}
-
-/* the spinning platter image */
-.hero-media .record-spin img{
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
-
-  /* IMPORTANT: spin uses its own transform (no conflicts now) */
-  transform-origin: 50% 50%;
-  animation: recordSpinFast 1.05s linear infinite;
-  will-change: transform;
-
-  /* keep edges clean */
-  filter: drop-shadow(0 8px 18px rgba(0,0,0,.18));
-}
-
-/* spin + tiny wobble */
-@keyframes recordSpinFast{
-  to { transform: rotate(360deg); }
-}
-
-@keyframes recordWobble{
-  0%,100% { transform: translate(0,0) rotate(0deg); }
-  50%     { transform: translate(0.6px,-0.6px) rotate(0.35deg); }
-}
-
-/* optional: "playing" pulse on the whole player image (subtle) */
-.hero-media > img{
-  animation:
-    slowPan 7s ease-in-out infinite alternate,
-    playerPlayingPulse 2.2s ease-in-out infinite;
-}
-
-@keyframes playerPlayingPulse{
-  0%,100% { transform: scale(1) translateZ(0); }
-  50%     { transform: scale(1.012) translateZ(0); }
-}
-
-/* mobile tweak */
-@media (max-width: 768px){
-  .hero-media .record-spin{
-    width: 38%;
-    left: 22%;
-    top: 20%;
-  }
-}
-/* =========================================================
-   PATCH: platter spins on the player + orbit record moves
-   Paste at END of styles.css
-========================================================= */
-
-/* 1) Make sure hero-card is the positioning context */
-.hero-card{ position: relative; }
-
-/* ------------------------------
-   A) PLATTER (on the player)
------------------------------- */
-
-/* Keep figure as the anchor */
-.hero-media{ position: relative; }
-
-/* Place platter precisely over the printed platter area */
-.hero-media .record-spin{
-  position: absolute;
-  z-index: 6;            /* above the player image */
-  pointer-events: none;
-  isolation: isolate;
-
-  width: 33%;            /* platter size */
-  aspect-ratio: 1 / 1;
-
-  left: 24%;
-  top: 22%;              /* move UP for alignment */
-
-  /* smooth animation rendering */
-  transform: translateZ(0);
-  will-change: transform;
-}
-
-/* Optional: a soft inner shadow so it "sits" on the deck */
-.hero-media .record-spin::after{
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  box-shadow: inset 0 0 18px rgba(0,0,0,.28);
-  opacity: .35;
-}
-
-/* The platter image spins */
-.hero-media .record-spin img{
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-
-  border-radius: 50%;
-  clip-path: circle(50% at 50% 50%);
-
-  transform-origin: 50% 50%;
-  animation: platterSpin 1.15s linear infinite;
-}
-
-/* Give the whole player a gentle "playing" pulse (cheap) */
-.hero-media > img{
-  animation:
-    slowPan 7s ease-in-out infinite alternate,
-    playerPulse 2.4s ease-in-out infinite;
-}
-
-/* Plates keep their existing animation, but slightly less heavy */
-.hero-media::before,
-.hero-media::after{
-  will-change: transform, opacity;
-}
-
-/* ------------------------------
-   B) ORBIT RING now contains the old rawpixel record
------------------------------- */
-
-.shape--orbit{
-  position: absolute;       /* in case earlier CSS lost it */
-  overflow: visible;
-}
-
-/* Center the record inside the ring */
-.shape--orbit .orbit-record{
-  position: absolute;
-  inset: 18%;               /* makes it sit inside the ring nicely */
-  width: auto;
-  height: auto;
-  border-radius: 50%;
-  clip-path: circle(50% at 50% 50%);
-  object-fit: cover;
-
-  opacity: .75;
-
-  /* subtle rotation so it feels alive */
-  transform-origin: 50% 50%;
-  animation: orbitRecordSpin 8s linear infinite;
-}
-
-/* ------------------------------
-   C) TONEARM (subtle fake)
-   We can't isolate the real tonearm without a separate image,
-   so we do a *tiny* deck wobble that reads like tonearm movement.
-   Cheap + looks good.
------------------------------- */
-.hero-media > img{
-  transform-origin: 70% 45%;
-}
-
-/* ------------------------------
-   D) Keyframes
------------------------------- */
 @keyframes platterSpin{
   to { transform: rotate(360deg); }
 }
@@ -563,30 +321,75 @@ body{
   50%     { transform: scale(1.01) translateZ(0); }
 }
 
-/* ------------------------------
-   E) Reduced motion (accessibility + perf)
------------------------------- */
+@keyframes platePulsePink{
+  0%,100%{ opacity:.85; }
+  50%{ opacity:1; }
+}
+
+@keyframes platePulsePurple{
+  0%,100%{ opacity:.45; }
+  50%{ opacity:.65; }
+}
+
+@keyframes slowPan{
+  from{ transform: scale(1.06) translate(0,0); }
+  to  { transform: scale(1.12) translate(-18px,12px); }
+}
+
+@keyframes washPulse{
+  0%,100%{ opacity:.85; transform: scale(1); }
+  50%{ opacity:1; transform: scale(1.02); }
+}
+
+@keyframes spin{
+  to{ transform: rotate(360deg); }
+}
+
+@keyframes floaty{
+  0%,100%{ transform: translate(0,0); }
+  50%{ transform: translate(18px,-14px); }
+}
+
+@keyframes floaty2{
+  0%,100%{ transform: translate(0,0); }
+  50%{ transform: translate(12px,10px); }
+}
+
+@keyframes orbitDrift{
+  0%,100%{ transform: translateX(0); }
+  50%{ transform: translateX(-80px); }
+}
+
+/* =========================
+   ACCESSIBILITY: reduced motion
+========================= */
 @media (prefers-reduced-motion: reduce){
-  .hero-media .record-spin img,
-  .shape--orbit .orbit-record,
-  .hero-media > img,
-  .shape--blob,
-  .shape--ring,
-  .shape--circle,
-  .shape--dot,
-  .shape--orbit{
+  *{
     animation: none !important;
+    transition: none !important;
   }
 }
 
-/* ------------------------------
-   F) Mobile tweak (platter positioning)
------------------------------- */
+/* =========================
+   MOBILE
+========================= */
 @media (max-width: 768px){
+  .hero-card{
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2.5rem;
+  }
+
+  .shape--orbit{
+    right: 20px;
+    top: -60px;
+    width: 260px;
+    height: 260px;
+  }
+
   .hero-media .record-spin{
     width: 40%;
     left: 22%;
     top: 20%;
   }
 }
-
