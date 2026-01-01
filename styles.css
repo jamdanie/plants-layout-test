@@ -417,35 +417,47 @@ body{
   }
 }
 
-/* ===== PLATTER CIRCLE FIX (paste at VERY END) ===== */
+/* ===== FINAL PLATTER MICRO-ALIGN (LAST OVERRIDE) ===== */
 
-/* Force the platter container to ALWAYS be a perfect square */
+/* 1) Move platter slightly UP + RIGHT and make it slightly larger */
 .hero-media .record-spin{
-  left: 24.2% !important;      /* keep your alignment */
-  top: 24.0% !important;
+  top: 22.3% !important;     /* was ~24% → move UP */
+  left: 24.8% !important;    /* nudge RIGHT */
 
-  width: 38% !important;       /* size controlled by width only */
-  height: auto !important;     /* remove % height that causes oval */
+  width: 40% !important;     /* slightly bigger */
   aspect-ratio: 1 / 1 !important;
+  height: auto !important;
 
   border-radius: 50% !important;
   overflow: hidden !important;
 
-  /* keep spinning */
-  animation: platterContainerSpin 1.15s linear infinite !important;
+  animation: platterSpin 1.1s linear infinite !important;
   transform-origin: 50% 50% !important;
 }
 
-/* If your black vinyl is drawn on ::after, keep it perfectly square too */
+/* 2) Ensure the masked vinyl fully fills the circle */
 .hero-media .record-spin::after{
-  inset: 0 !important;
+  inset: -1% !important;     /* tiny overscan to fill edge */
   border-radius: 50% !important;
-  animation: platterSpin 1.15s linear infinite !important;
-  transform-origin: 50% 50% !important;
+
+  -webkit-mask-size: 100% 100% !important;
+  mask-size: 100% 100% !important;
+
+  animation: platterSpin 1.1s linear infinite !important;
 }
 
-/* Backup keyframes (if not already defined above) */
-@keyframes platterContainerSpin{
-  to { transform: rotate(360deg); }
+/* 3) Safety: force GPU rendering to avoid wobble */
+.hero-media .record-spin,
+.hero-media .record-spin::after{
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
+/* 4) Mobile correction */
+@media (max-width: 768px){
+  .hero-media .record-spin{
+    width: 44% !important;
+    top: 21.5% !important;
+    left: 23% !important;
+  }
+}
