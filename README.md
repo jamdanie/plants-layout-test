@@ -26,3 +26,5 @@ This project was built as a layout exercise to strengthen fundamentals before ad
 - HTML
 - CSS
 - GitHub Pages
+
+- Test change for GitHub YOLO achievement.
